@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getLobbyById } from "@/lib/storage";
 import { Lobby } from "@/app/types/lobby";
+import { isSiteClosed, siteClosedResponse } from "@/lib/site-utils";
 
 interface RouteParams {
 	params: Promise<{
@@ -9,6 +10,7 @@ interface RouteParams {
 }
 
 export async function GET(request: NextRequest, { params }: RouteParams): Promise<NextResponse<Lobby | { error: string }>> {
+	if (isSiteClosed()) return siteClosedResponse();
 	try {
 		const { lobbyId } = await params;
 

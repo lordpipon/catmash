@@ -99,13 +99,12 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en" className={`${fontSans.variable} ${fontMono.variable}`}>
-			{process.env.NODE_ENV === "development" && (
-				<head>
+			<head>
+				{process.env.NODE_ENV === "development" && (
 					<script crossOrigin="anonymous" src="//unpkg.com/react-scan/dist/auto.global.js" />
-				</head>
-			)}
-			<script defer data-domain="editmash.com" src="https://analytics.outpoot.com/js/script.file-downloads.js"></script>
-
+				)}
+				<script defer data-domain="editmash.com" src="https://analytics.outpoot.com/js/script.file-downloads.js"></script>
+			</head>
 			<body className="antialiased">
 				<BannedCheck>{children}</BannedCheck>
 				<Toaster />

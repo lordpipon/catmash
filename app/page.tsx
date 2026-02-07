@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { usePlayer } from "./hooks/usePlayer";
+import { isSiteClosed } from "@/lib/site-utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
@@ -26,6 +27,68 @@ import { isLobbiesUpdateMessage, serializeMessage, deserializeMessage, createSub
 
 export default function MatchmakingPage() {
 	const router = useRouter();
+
+	if (isSiteClosed()) {
+		return (
+			<div className="min-h-screen bg-background flex flex-col">
+				<header className="border-b bg-card">
+					<div className="container mx-auto px-4 py-4 flex items-center justify-between">
+						<div className="flex items-center gap-4">
+							<div className="flex items-center gap-2">
+								<img src="/editmash.svg" alt="EditMash Logo" className="w-6 h-6" />
+								<h1 className="text-xl font-extrabold">EditMash</h1>
+							</div>
+							<button
+								onClick={() => router.push("/library")}
+								className="text-xs font-medium text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+							>
+								Library
+							</button>
+						</div>
+					</div>
+				</header>
+
+				<main className="flex-1 flex items-center justify-center px-4">
+					<div className="max-w-lg text-center space-y-6">
+						<img src="/editmash.svg" alt="EditMash" className="w-16 h-16 mx-auto opacity-50" />
+						<h2 className="text-2xl font-bold">The EditMash experiment has ended</h2>
+						<div className="space-y-3 text-muted-foreground">
+							<p>
+								Thank you to everyone who participated in EditMash! It was incredible seeing the internet create "art."
+							</p>
+							<p>
+								Due to the ongoing costs of running the platform, moderation concerns, and other factors, we&apos;ve made the decision to shut down active operations.
+								The site is now in <span className="font-semibold text-foreground">archive mode</span> — you can no longer create
+								or join matches, but the library of completed videos remains available for viewing.
+							</p>
+							<p>
+								See you later - FaceDev
+							</p>
+						</div>
+						<Button size="lg" onClick={() => router.push("/library")} className="gap-2">
+							Browse the Archive
+						</Button>
+					</div>
+				</main>
+
+				<footer className="py-4 px-4 flex justify-center gap-4 text-xs text-muted-foreground">
+					<a href="/help" className="hover:text-foreground transition-colors">
+						Help
+					</a>
+					<a href="/terms" className="hover:text-foreground transition-colors">
+						Terms
+					</a>
+					<a href="/privacy" className="hover:text-foreground transition-colors">
+						Privacy
+					</a>
+					<a href="https://discord.gg/facedev" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
+						Discord
+					</a>
+				</footer>
+			</div>
+		);
+	}
+
 	const { playerId, username, isLoading: playerLoading, isAuthenticated, activeMatch } = usePlayer();
 
 	const [lobbies, setLobbies] = useState<LobbyListItemWithConfig[]>([]);

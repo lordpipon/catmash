@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useDebouncedCallback } from "@/lib/utils";
+import { isSiteClosed } from "@/lib/site-utils";
 import { useRouter } from "next/navigation";
 import { useSession, signOut, getSession } from "@/lib/auth-client";
 import { toast } from "sonner";
@@ -32,6 +33,12 @@ import {
 
 export default function AccountPage() {
 	const router = useRouter();
+
+	if (isSiteClosed()) {
+		router.replace("/");
+		return null;
+	}
+
 	const { data: session, isPending } = useSession();
 
 	const [showEmail, setShowEmail] = useState(false);

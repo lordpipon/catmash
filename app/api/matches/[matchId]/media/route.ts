@@ -6,6 +6,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { isNameAppropriate } from "@/lib/moderation";
 import { validateMediaUrl } from "@/lib/mediaValidation";
+import { isSiteClosed, siteClosedResponse } from "@/lib/site-utils";
 
 interface RouteParams {
 	params: Promise<{
@@ -51,6 +52,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 }
 
 export async function POST(request: NextRequest, { params }: RouteParams) {
+	if (isSiteClosed()) return siteClosedResponse();
 	try {
 		const { matchId } = await params;
 

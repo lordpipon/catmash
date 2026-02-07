@@ -4,8 +4,10 @@ import { videoLikes } from "@/lib/db/schema";
 import { eq, and, sql } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { isSiteClosed, siteClosedResponse } from "@/lib/site-utils";
 
 export async function POST(request: NextRequest, { params }: { params: Promise<{ matchId: string }> }) {
+	if (isSiteClosed()) return siteClosedResponse();
 	const { matchId } = await params;
 
 	const session = await auth.api.getSession({ headers: await headers() });

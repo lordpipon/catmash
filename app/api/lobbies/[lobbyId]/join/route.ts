@@ -3,6 +3,7 @@ import { addPlayerToLobby, getLobbyById } from "@/lib/storage";
 import { JoinLobbyResponse } from "@/app/types/lobby";
 import { getServerSession } from "@/lib/auth";
 import { notifyWsServer } from "@/lib/wsNotify";
+import { isSiteClosed, siteClosedResponse } from "@/lib/site-utils";
 
 interface RouteParams {
 	params: Promise<{
@@ -11,6 +12,7 @@ interface RouteParams {
 }
 
 export async function POST(request: NextRequest, { params }: RouteParams): Promise<NextResponse<JoinLobbyResponse | { error: string }>> {
+	if (isSiteClosed()) return siteClosedResponse();
 	try {
 		const session = await getServerSession();
 		if (!session) {

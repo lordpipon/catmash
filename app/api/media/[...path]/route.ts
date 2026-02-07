@@ -3,6 +3,7 @@ import { downloadFromB2 } from "@/lib/b2";
 import { ALL_ALLOWED_MIME_TYPES, getMimeTypeFromExtension } from "@/lib/validation";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { isSiteClosed } from "@/lib/site-utils";
 
 const CACHE_MAX_AGE = 3600; // 1 hour
 const ALLOWED_PREFIXES = ["avatars/", "renders/"];
@@ -36,9 +37,11 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
 		const fileName = path.join("/");
 
-		const session = await auth.api.getSession({ headers: await headers() });
-		if (!session?.user) {
-			return NextResponse.json({ error: "Authentication required" }, { status: 401 });
+		if (!isSiteClosed()) {
+			const session = await auth.api.getSession({ headers: await headers() });
+			if (!session?.user) {
+				return NextResponse.json({ error: "Authentication required" }, { status: 401 });
+			}
 		}
 
 		const validation = validatePath(fileName);

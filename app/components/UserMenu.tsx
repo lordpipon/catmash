@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession, signIn, signOut } from "@/lib/auth-client";
+import { isSiteClosed } from "@/lib/site-utils";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -52,6 +53,10 @@ function GoogleIcon({ className }: { className?: string }) {
 }
 
 export function UserMenu() {
+	if (isSiteClosed()) {
+		return null;
+	}
+
 	const router = useRouter();
 	const { data: session, isPending } = useSession();
 	const [showSignInDialog, setShowSignInDialog] = useState(false);

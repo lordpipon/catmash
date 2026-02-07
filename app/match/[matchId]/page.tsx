@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, use, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { usePlayer } from "@/app/hooks/usePlayer";
+import { isSiteClosed } from "@/lib/site-utils";
 import TopBar from "@/app/components/TopBar";
 import MainLayout, { MainLayoutRef } from "@/app/components/MainLayout";
 import { MatchWS, useMatchWebSocketOptional, flatPropertiesToNested } from "@/app/components/MatchWS";
@@ -62,6 +63,12 @@ interface MatchStatusResponse {
 export default function MatchPage({ params }: { params: Promise<{ matchId: string }> }) {
 	const { matchId } = use(params);
 	const router = useRouter();
+
+	if (isSiteClosed()) {
+		router.replace("/");
+		return null;
+	}
+
 	const { playerId, username, isLoading: playerLoading } = usePlayer();
 
 	const stablePlayerRef = useRef<{ playerId: string; username: string } | null>(null);

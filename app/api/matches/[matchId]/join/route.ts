@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { addPlayerToMatch, getMatchById } from "@/lib/storage";
 import { secureCompare } from "@/lib/security";
+import { isSiteClosed, siteClosedResponse } from "@/lib/site-utils";
 
 interface RouteParams {
 	params: Promise<{
@@ -9,6 +10,7 @@ interface RouteParams {
 }
 
 export async function POST(request: NextRequest, { params }: RouteParams) {
+	if (isSiteClosed()) return siteClosedResponse();
 	try {
 		const { matchId } = await params;
 

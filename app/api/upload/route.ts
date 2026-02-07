@@ -4,8 +4,10 @@ import { validateFile, getFileExtension, getFileCategory } from "@/lib/validatio
 import { validateVideoFile, validateImageFile } from "@/lib/mediaValidation";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { isSiteClosed, siteClosedResponse } from "@/lib/site-utils";
 
 export async function POST(request: NextRequest) {
+	if (isSiteClosed()) return siteClosedResponse();
 	try {
 		const session = await auth.api.getSession({ headers: await headers() });
 		if (!session?.user) {

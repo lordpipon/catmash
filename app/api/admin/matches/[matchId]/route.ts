@@ -5,8 +5,10 @@ import { eq } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { deleteMultipleFromB2, deleteFileByName } from "@/lib/b2";
+import { isSiteClosed, siteClosedResponse } from "@/lib/site-utils";
 
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ matchId: string }> }) {
+	if (isSiteClosed()) return siteClosedResponse();
 	const session = await auth.api.getSession({ headers: await headers() });
 
 	if (!session?.user) {

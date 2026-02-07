@@ -6,8 +6,10 @@ import { CreateLobbyRequest, CreateLobbyResponse, LobbyListResponse, LobbyStatus
 import { getServerSession } from "@/lib/auth";
 import { notifyWsServer } from "@/lib/wsNotify";
 import { isNameAppropriate } from "@/lib/moderation";
+import { isSiteClosed, siteClosedResponse } from "@/lib/site-utils";
 
 export async function POST(request: NextRequest): Promise<NextResponse<CreateLobbyResponse | { error: string }>> {
+	if (isSiteClosed()) return siteClosedResponse();
 	try {
 		const session = await getServerSession();
 		if (!session) {
@@ -67,6 +69,9 @@ export async function POST(request: NextRequest): Promise<NextResponse<CreateLob
 }
 
 export async function GET(request: NextRequest): Promise<NextResponse<LobbyListResponse | { error: string }>> {
+	if (isSiteClosed()) {
+		return NextResponse.json({ lobbies: [], total: 0 });
+	}
 	try {
 		const { searchParams } = new URL(request.url);
 		const status = searchParams.get("status") as LobbyStatus | null;

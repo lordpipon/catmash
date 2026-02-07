@@ -11,6 +11,7 @@ import { Pagination, PaginationContent, PaginationItem } from "@/components/ui/p
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowLeft01Icon, ArrowLeft02Icon, ArrowRight02Icon, FavouriteIcon, Calendar03Icon, UserGroupIcon, Video01Icon, Delete02Icon } from "@hugeicons/core-free-icons";
 import { UserMenu } from "../components/UserMenu";
+import { isSiteClosed } from "@/lib/site-utils";
 
 interface LibraryVideo {
 	id: string;
@@ -34,10 +35,12 @@ export default function LibraryPage() {
 	const [sortBy, setSortBy] = useState<"date" | "likes">("date");
 	const [currentPage, setCurrentPage] = useState(1);
 	const [hasMore, setHasMore] = useState(true);
+	const siteClosed = isSiteClosed();
 	const [isAdmin, setIsAdmin] = useState(false);
 	const [deletingMatch, setDeletingMatch] = useState<string | null>(null);
 
 	useEffect(() => {
+		if (siteClosed) return;
 		async function checkAdmin() {
 			try {
 				const response = await fetch("/api/user/status");
@@ -192,8 +195,9 @@ export default function LibraryPage() {
 									onLike={handleLike} 
 									onDelete={handleDelete}
 									formatDate={formatDate} 
-									isAdmin={isAdmin}
-									isDeleting={deletingMatch === video.id}
+								isAdmin={!siteClosed && isAdmin}
+								isDeleting={deletingMatch === video.id}
+								readOnly={siteClosed}
 								/>
 							))}
 						</div>
@@ -249,6 +253,7 @@ function VideoCard({
 	formatDate,
 	isAdmin,
 	isDeleting,
+	readOnly,
 }: {
 	video: LibraryVideo;
 	onLike: (matchId: string, e: React.MouseEvent) => void;
@@ -256,6 +261,7 @@ function VideoCard({
 	formatDate: (date: string) => string;
 	isAdmin: boolean;
 	isDeleting: boolean;
+	readOnly?: boolean;
 }) {
 	const router = useRouter();
 
@@ -305,6 +311,12 @@ function VideoCard({
 							<span>{formatDate(video.completedAt)}</span>
 						</div>
 					</div>
+					{readOnly ? (
+						<span className="flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-muted text-muted-foreground">
+							<HugeiconsIcon icon={FavouriteIcon} className="w-3.5 h-3.5" />
+							{video.likeCount}
+						</span>
+					) : (
 					<button
 						onClick={(e) => onLike(video.id, e)}
 						className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs transition-colors ${
@@ -316,6 +328,7 @@ function VideoCard({
 						<HugeiconsIcon icon={FavouriteIcon} className="w-3.5 h-3.5" fill={video.liked ? "currentColor" : "none"} />
 						{video.likeCount}
 					</button>
+					)}
 				</div>
 			</CardContent>
 		</Card>

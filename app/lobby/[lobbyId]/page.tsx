@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, use, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { usePlayer } from "@/app/hooks/usePlayer";
+import { isSiteClosed } from "@/lib/site-utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -29,6 +30,12 @@ import { serializeMessage, createJoinLobbyMessage, createLeaveLobbyMessage } fro
 export default function LobbyPage({ params }: { params: Promise<{ lobbyId: string }> }) {
 	const { lobbyId } = use(params);
 	const router = useRouter();
+
+	if (isSiteClosed()) {
+		router.replace("/");
+		return null;
+	}
+
 	const { playerId, username, image: userImage, isLoading: playerLoading, isAuthenticated } = usePlayer();
 
 	const [lobby, setLobby] = useState<Lobby | null>(null);
@@ -378,8 +385,8 @@ export default function LobbyPage({ params }: { params: Promise<{ lobbyId: strin
 						</Card>
 
 						{autoCloseCountdown && (
-							<Alert className="bg-orange-50 border-orange-200 dark:bg-orange-950/20 dark:border-orange-900/50">
-								<HugeiconsIcon icon={Alert02Icon} className="w-4 h-4 text-orange-600 dark:text-orange-400" />
+							<Alert className="bg-orange-50 border-orange-200 dark:bg-orange-950/20 dark:border-orange-900/50 flex flex-row items-center gap-2">
+								<HugeiconsIcon icon={Alert02Icon} className="w-4 h-4 text-orange-600 dark:text-orange-400 shrink-0" />
 								<AlertDescription className="text-orange-900 dark:text-orange-100">
 									Lobby closes in <span className="font-mono font-bold">{autoCloseCountdown}</span> if match doesn't start
 								</AlertDescription>

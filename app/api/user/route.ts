@@ -7,8 +7,10 @@ import { uploadToB2, deleteFileByName, listFileVersions } from "@/lib/b2";
 import { processImage } from "@/lib/image";
 import { getPlayerActiveMatch, getPlayerActiveLobby } from "@/lib/storage";
 import { isNameAppropriate } from "@/lib/moderation";
+import { isSiteClosed, siteClosedResponse } from "@/lib/site-utils";
 
 export async function GET() {
+	if (isSiteClosed()) return siteClosedResponse();
 	try {
 		const currentSession = await getServerSession();
 		if (!currentSession) {
@@ -37,6 +39,7 @@ export async function GET() {
 }
 
 export async function PATCH(request: Request) {
+	if (isSiteClosed()) return siteClosedResponse();
 	try {
 		const currentSession = await getServerSession();
 		if (!currentSession) {
@@ -172,6 +175,7 @@ export async function PATCH(request: Request) {
 }
 
 export async function DELETE() {
+	if (isSiteClosed()) return siteClosedResponse();
 	try {
 		const currentSession = await getServerSession();
 		if (!currentSession) {

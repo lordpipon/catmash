@@ -4,8 +4,10 @@ import { StartMatchRequest, StartMatchResponse } from "@/app/types/match";
 import { notifyWsServer } from "@/lib/wsNotify";
 import { getServerSession } from "@/lib/auth";
 import { getLobbyByIdInternal } from "@/lib/storage";
+import { isSiteClosed, siteClosedResponse } from "@/lib/site-utils";
 
 export async function POST(request: NextRequest): Promise<NextResponse<StartMatchResponse | { error: string }>> {
+	if (isSiteClosed()) return siteClosedResponse();
 	try {
 		const body = (await request.json()) as StartMatchRequest;
 

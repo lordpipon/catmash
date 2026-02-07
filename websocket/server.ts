@@ -71,6 +71,8 @@ import {
 } from "./handlers";
 import { secureCompare } from "../lib/security";
 
+const CLOSE_SITE = process.env.CLOSE_SITE === "true" || process.env.NEXT_PUBLIC_CLOSE_SITE === "true";
+
 function handleMessage(ws: ServerWebSocket<WebSocketData>, rawMessage: string | Buffer | ArrayBuffer): void {
 	try {
 		if (typeof rawMessage === "string") {
@@ -257,6 +259,13 @@ const server = Bun.serve({
 	port: PORT,
 
 	async fetch(req, srv) {
+        if (CLOSE_SITE) {
+            return new Response(JSON.stringify({ error: "Site is in archive mode" }), {
+                status: 403,
+                headers: { "Content-Type": "application/json" },
+            });
+        }
+
         let url: URL;
         try {
             url = new URL(req.url);
@@ -398,6 +407,6 @@ const server = Bun.serve({
 
 });
 
-console.log(`[WS] EditMash WebSocket server running on port ${PORT}`);
+console.log(`[WS] EditMash WebSocket server running on port ${PORT}${CLOSE_SITE ? " (ARCHIVE MODE — rejecting all connections)" : ""}`);
 
 export { server, broadcast, matchPlayers, connections };

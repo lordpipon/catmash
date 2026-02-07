@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "@/lib/auth";
 import { getDb } from "@/lib/db";
+import { isSiteClosed, siteClosedResponse } from "@/lib/site-utils";
 import {
 	user,
 	session,
@@ -15,6 +16,7 @@ import {
 import { eq } from "drizzle-orm";
 
 export async function GET() {
+	if (isSiteClosed()) return siteClosedResponse();
 	try {
 		const currentSession = await getServerSession();
 		if (!currentSession) {

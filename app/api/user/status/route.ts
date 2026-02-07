@@ -4,8 +4,10 @@ import { user } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { isSiteClosed } from "@/lib/site-utils";
 
 export async function GET(request: NextRequest) {
+	if (isSiteClosed()) return NextResponse.json({ isAdmin: false, isBanned: false });
 	const session = await auth.api.getSession({ headers: await headers() });
 	
 	if (!session?.user) {

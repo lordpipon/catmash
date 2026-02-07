@@ -4,6 +4,7 @@ import { MatchStateResponse, Match } from "@/app/types/match";
 import type { TimelineState } from "@/app/types/timeline";
 import { secureCompare } from "@/lib/security";
 import { getQueuePosition, getJobById, getRenderProgress } from "@/lib/queue";
+import { isSiteClosed, siteClosedResponse } from "@/lib/site-utils";
 
 const regex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -106,6 +107,7 @@ export async function GET(
 }
 
 export async function PATCH(request: NextRequest, { params }: RouteParams) {
+	if (isSiteClosed()) return siteClosedResponse();
 	try {
 		const { matchId } = await params;
 

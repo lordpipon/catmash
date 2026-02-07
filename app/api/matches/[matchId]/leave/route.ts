@@ -3,6 +3,7 @@ import { markPlayerDisconnected, getMatchById, removePlayerFromLobby } from "@/l
 import { getServerSession } from "@/lib/auth";
 import { notifyWsServer } from "@/lib/wsNotify";
 import { secureCompare } from "@/lib/security";
+import { isSiteClosed, siteClosedResponse } from "@/lib/site-utils";
 
 interface RouteParams {
 	params: Promise<{
@@ -11,6 +12,7 @@ interface RouteParams {
 }
 
 export async function POST(request: NextRequest, { params }: RouteParams): Promise<NextResponse> {
+	if (isSiteClosed()) return siteClosedResponse();
 	try {
 		const { matchId } = await params;
 

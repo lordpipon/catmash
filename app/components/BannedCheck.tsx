@@ -3,8 +3,13 @@
 import { useEffect, useState } from "react";
 import { useSession, signOut } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
+import { isSiteClosed } from "@/lib/site-utils";
 
 export function BannedCheck({ children }: { children: React.ReactNode }) {
+	if (isSiteClosed()) {
+		return <>{children}</>;
+	}
+
 	const { data: session, isPending } = useSession();
 	const [isBanned, setIsBanned] = useState<boolean | null>(null);
 	const [isChecking, setIsChecking] = useState(true);
