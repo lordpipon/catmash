@@ -57,21 +57,12 @@ export const metadata: Metadata = {
 		title: "Catmash",
 		description:
 			"Join timed matches and collaborate with dozens of players to create short, chaotic videos on a shared timeline. No skill required — just fun and creativity.",
-		images: [
-			{
-				url: "/thumbnail.png",
-				width: 1200,
-				height: 630,
-				alt: "Catmash — Create chaos together",
-			},
-		],
 	},
 	twitter: {
-		card: "summary_large_image",
+		card: "summary",
 		title: "Catmash",
 		description:
 			"Join timed matches and collaborate with dozens of players to create short, chaotic videos on a shared timeline. No skill required — just fun and creativity.",
-		images: ["/thumbnail.png"],
 	},
 	applicationName: "Catmash",
 	appleWebApp: {
@@ -82,9 +73,10 @@ export const metadata: Metadata = {
 	formatDetection: {
 		telephone: false,
 	},
-	other: {
-		"theme-color": "#1447e6",
-	},
+	themeColor: [
+		{ media: "(prefers-color-scheme: light)", color: "#000000" },
+		{ media: "(prefers-color-scheme: dark)", color: "#ffffff" },
+	],
 };
 
 export default function RootLayout({
