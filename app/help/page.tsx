@@ -54,7 +54,7 @@ export default function HelpPage() {
 							<div>
 								<h3 className="font-semibold">Sign In</h3>
 								<p className="text-muted-foreground text-sm">
-									Click &quot;Sign In&quot; and authenticate with your Google account. No passwords required.
+									Click &quot;Sign In&quot; and authenticate with your Google account, or register with an email address and password.
 								</p>
 							</div>
 						</div>

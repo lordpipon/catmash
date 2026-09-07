@@ -58,6 +58,18 @@ export const auth = betterAuth({
 		},
 	},
 
+	emailAndPassword: {
+		enabled: true,
+		minPasswordLength: 8,
+	},
+
+	user: {
+		changeEmail: {
+			enabled: true,
+			updateEmailWithoutVerification: true,
+		},
+	},
+
 	account: {
 		accountLinking: {
 			enabled: true,

@@ -3,9 +3,12 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useSession, signIn, signOut } from "@/lib/auth-client";
+import { useSession, signIn, signUp, signOut } from "@/lib/auth-client";
 import { isSiteClosed } from "@/lib/site-utils";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
 	DropdownMenu,
@@ -64,6 +67,12 @@ export function UserMenu() {
 	const [isSigningOut, setIsSigningOut] = useState(false);
 	const [showEmail, setShowEmail] = useState(false);
 	const [isAdmin, setIsAdmin] = useState(false);
+	const [authMode, setAuthMode] = useState<"signin" | "signup">("signin");
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const [name, setName] = useState("");
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [authError, setAuthError] = useState<string | null>(null);
 
 	useEffect(() => {
 		async function checkAdmin() {
@@ -112,6 +121,55 @@ export function UserMenu() {
 		}
 	};
 
+	const switchAuthMode = () => {
+		setAuthMode(authMode === "signin" ? "signup" : "signin");
+		setAuthError(null);
+	};
+
+	const handleEmailAuth = async (e: React.FormEvent) => {
+		e.preventDefault();
+		if (isSubmitting) return;
+		setIsSubmitting(true);
+		setAuthError(null);
+		try {
+			if (authMode === "signup") {
+				if (password.length < 8) {
+					setAuthError("Password must be at least 8 characters");
+					return;
+				}
+				const res = await signUp.email({
+					email,
+					password,
+					name: name.trim() || email.split("@")[0],
+					callbackURL: window.location.href,
+				});
+				if (res.error) {
+					setAuthError(res.error.message || "Failed to create account");
+					return;
+				}
+			} else {
+				const res = await signIn.email({
+					email,
+					password,
+					callbackURL: window.location.href,
+				});
+				if (res.error) {
+					setAuthError(res.error.message || "Failed to sign in");
+					return;
+				}
+			}
+			setShowSignInDialog(false);
+			setEmail("");
+			setPassword("");
+			setName("");
+			window.location.reload();
+		} catch {
+			setAuthError("Something went wrong");
+		} finally {
+			setIsSubmitting(false);
+		}
+	};
+
 	const handleSignOut = async () => {
 		setIsSigningOut(true);
 		try {
@@ -145,15 +203,93 @@ export function UserMenu() {
 				<Dialog open={showSignInDialog} onOpenChange={setShowSignInDialog}>
 					<DialogContent className="max-w-md">
 						<DialogHeader>
-							<DialogTitle>Sign in</DialogTitle>
+							<DialogTitle>{authMode === "signin" ? "Sign in" : "Create an account"}</DialogTitle>
 							<DialogDescription>Create an account to make and join lobbies.</DialogDescription>
 						</DialogHeader>
 
-						<div className="py-4">
+						<div className="py-4 space-y-4">
+							<div className="flex rounded-lg bg-muted p-1">
+								<button
+									type="button"
+									onClick={() => switchAuthMode()}
+									className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-colors ${authMode === "signin" ? "bg-background shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
+								>
+									Sign in
+								</button>
+								<button
+									type="button"
+									onClick={() => switchAuthMode()}
+									className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-colors ${authMode === "signup" ? "bg-background shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
+								>
+									Create account
+								</button>
+							</div>
+
 							<Button className="w-full gap-3 h-11" onClick={handleGoogleSignIn} disabled={isSigningIn}>
 								{isSigningIn ? <HugeiconsIcon icon={Loading03Icon} className="h-5 w-5 animate-spin" /> : <GoogleIcon className="h-5 w-5" />}
 								{isSigningIn ? "Signing in..." : "Continue with Google"}
 							</Button>
+
+							<div className="flex items-center gap-3">
+								<Separator className="flex-1" />
+								<span className="text-xs text-muted-foreground">or</span>
+								<Separator className="flex-1" />
+							</div>
+
+							<form onSubmit={handleEmailAuth} className="space-y-3">
+								{authMode === "signup" && (
+									<div className="space-y-2">
+										<Label htmlFor="auth-name" className="text-muted-foreground text-xs uppercase tracking-wide">
+											Name
+										</Label>
+										<Input
+											id="auth-name"
+											value={name}
+											onChange={(e) => setName(e.target.value)}
+											placeholder="Your name"
+											maxLength={32}
+										/>
+									</div>
+								)}
+								<div className="space-y-2">
+									<Label htmlFor="auth-email" className="text-muted-foreground text-xs uppercase tracking-wide">
+										Email
+									</Label>
+									<Input
+										id="auth-email"
+										type="email"
+										value={email}
+										onChange={(e) => setEmail(e.target.value)}
+										placeholder="you@example.com"
+										required
+									/>
+								</div>
+								<div className="space-y-2">
+									<Label htmlFor="auth-password" className="text-muted-foreground text-xs uppercase tracking-wide">
+										Password
+									</Label>
+									<Input
+										id="auth-password"
+										type="password"
+										value={password}
+										onChange={(e) => setPassword(e.target.value)}
+										placeholder={authMode === "signup" ? "At least 8 characters" : "Your password"}
+										required
+									/>
+								</div>
+
+								{authError && <p className="text-sm text-destructive">{authError}</p>}
+
+								<Button type="submit" className="w-full h-11" disabled={isSubmitting}>
+									{isSubmitting ? (
+										<HugeiconsIcon icon={Loading03Icon} className="h-5 w-5 animate-spin" />
+									) : authMode === "signin" ? (
+										"Sign in"
+									) : (
+										"Create account"
+									)}
+								</Button>
+							</form>
 						</div>
 
 						<p className="text-xs text-muted-foreground text-center">

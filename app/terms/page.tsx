@@ -70,9 +70,9 @@ export default function TermsOfServicePage() {
 					<section>
 						<h2 className="text-2xl font-bold mb-4">4. Account Registration</h2>
 						<div className="space-y-3 text-muted-foreground">
-							<p>To use Catmash, you must sign in using your Google account. You are responsible for:</p>
+							<p>To use Catmash, you must sign in using your Google account or register with an email address and password. You are responsible for:</p>
 							<ul className="list-disc pl-6 space-y-1">
-								<li>Maintaining the confidentiality of your Google account credentials</li>
+								<li>Maintaining the confidentiality of your account credentials and password</li>
 								<li>All activities that occur under your account</li>
 								<li>Notifying us immediately of any unauthorized use of your account</li>
 							</ul>

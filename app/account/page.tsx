@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { useDebouncedCallback } from "@/lib/utils";
 import { isSiteClosed } from "@/lib/site-utils";
 import { useRouter } from "next/navigation";
-import { useSession, signOut, getSession } from "@/lib/auth-client";
+import { useSession, signOut, getSession, changePassword, unlinkAccount, linkSocial } from "@/lib/auth-client";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -59,6 +59,25 @@ export default function AccountPage() {
 	const [isExportingData, setIsExportingData] = useState(false);
 	const fileInputRef = useRef<HTMLInputElement>(null);
 	const previewUrlsRef = useRef<Set<string>>(new Set());
+
+	const [secStatus, setSecStatus] = useState<{ hasPassword: boolean; googleLinked: boolean; canUnlinkGoogle: boolean } | null>(null);
+	const [setPass1, setSetPass1] = useState("");
+	const [setPass2, setSetPass2] = useState("");
+	const [currentPassword, setCurrentPassword] = useState("");
+	const [newPassword, setNewPassword] = useState("");
+	const [confirmNewPassword, setConfirmNewPassword] = useState("");
+	const [newEmail, setNewEmail] = useState("");
+	const [secBusy, setSecBusy] = useState(false);
+
+	useEffect(() => {
+		if (!session?.user?.id) return;
+		fetch("/api/user/security")
+			.then((res) => (res.ok ? res.json() : null))
+			.then((data) => {
+				if (data && typeof data.hasPassword === "boolean") setSecStatus(data);
+			})
+			.catch(console.error);
+	}, [session?.user?.id]);
 
 	useEffect(() => {
 		if (!isPending && !session) {
@@ -309,6 +328,129 @@ export default function AccountPage() {
 		}
 	};
 
+	const loadSecurity = async () => {
+		try {
+			const res = await fetch("/api/user/security");
+			if (res.ok) setSecStatus(await res.json());
+		} catch {
+			// ignore
+		}
+	};
+
+	const handleSetPassword = async () => {
+		if (secBusy) return;
+		if (setPass1.length < 8) {
+			toast.error("Password must be at least 8 characters");
+			return;
+		}
+		if (setPass1 !== setPass2) {
+			toast.error("Passwords don't match");
+			return;
+		}
+		setSecBusy(true);
+		try {
+			const res = await fetch("/api/user/set-password", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ newPassword: setPass1 }),
+			});
+			const d = await res.json().catch(() => ({}));
+			if (!res.ok) {
+				toast.error(d.error || "Failed to set password");
+				return;
+			}
+			toast.success("Password set! You can now sign in with email too.");
+			setSetPass1("");
+			setSetPass2("");
+			await loadSecurity();
+		} finally {
+			setSecBusy(false);
+		}
+	};
+
+	const handleChangePassword = async () => {
+		if (secBusy) return;
+		if (newPassword.length < 8) {
+			toast.error("Password must be at least 8 characters");
+			return;
+		}
+		if (newPassword !== confirmNewPassword) {
+			toast.error("Passwords don't match");
+			return;
+		}
+		setSecBusy(true);
+		try {
+			const res = await changePassword({ currentPassword, newPassword });
+			if (res.error) {
+				toast.error(res.error.message || "Failed to change password");
+				return;
+			}
+			toast.success("Password changed!");
+			setCurrentPassword("");
+			setNewPassword("");
+			setConfirmNewPassword("");
+		} finally {
+			setSecBusy(false);
+		}
+	};
+
+	const handleChangeEmail = async () => {
+		if (secBusy) return;
+		if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail)) {
+			toast.error("Enter a valid email address");
+			return;
+		}
+		setSecBusy(true);
+		try {
+			const res = await fetch("/api/user/change-email", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ newEmail }),
+			});
+			const d = await res.json().catch(() => ({}));
+			if (!res.ok) {
+				toast.error(d.error || "Failed to change email");
+				return;
+			}
+			toast.success(`Email updated to ${newEmail}`);
+			setNewEmail("");
+			await getSession({ query: { disableCookieCache: true } });
+			window.location.reload();
+		} finally {
+			setSecBusy(false);
+		}
+	};
+
+	const handleLinkGoogle = async () => {
+		try {
+			await linkSocial({ provider: "google", callbackURL: "/account" });
+		} catch {
+			toast.error("Failed to start Google linking");
+		}
+	};
+
+	const handleUnlinkGoogle = async () => {
+		if (!secStatus?.canUnlinkGoogle) return;
+		if (!window.confirm("Unlink your Google account?")) return;
+		setSecBusy(true);
+		try {
+			const res = await fetch("/api/auth/unlink-account", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ providerId: "google" }),
+			});
+			const d = await res.json().catch(() => ({}));
+			if (!res.ok) {
+				toast.error(d.message || d.error || "Failed to unlink Google");
+				return;
+			}
+			toast.success("Google account unlinked");
+			await loadSecurity();
+		} finally {
+			setSecBusy(false);
+		}
+	};
+
 	if (isPending) {
 		return (
 			<div className="min-h-screen bg-background flex items-center justify-center">
@@ -510,6 +652,122 @@ export default function AccountPage() {
 							<CardDescription>Manage your account security</CardDescription>
 						</CardHeader>
 						<CardContent className="space-y-4">
+							<div className="rounded-lg border p-4">
+								<div className="flex items-center justify-between flex-wrap gap-3">
+									<div className="space-y-1">
+										<p className="text-sm font-medium">Sign-in methods</p>
+										<p className="text-xs text-muted-foreground flex items-center gap-2 flex-wrap">
+											{secStatus === null ? (
+												<span className="text-muted-foreground">Loading...</span>
+											) : secStatus.hasPassword ? (
+												<span className="inline-flex items-center gap-1">
+													<HugeiconsIcon icon={Tick01Icon} className="h-3.5 w-3.5 text-green-500" />
+													Email &amp; Password
+												</span>
+											) : (
+												<span className="text-muted-foreground">No password set</span>
+											)}
+											<span className="opacity-40">·</span>
+											{secStatus?.googleLinked ? (
+												<span className="inline-flex items-center gap-1">
+													<HugeiconsIcon icon={Tick01Icon} className="h-3.5 w-3.5 text-green-500" />
+													Google
+												</span>
+											) : (
+												<span className="text-muted-foreground">Google not linked</span>
+											)}
+										</p>
+									</div>
+									{secStatus && !secStatus.googleLinked && (
+										<Button variant="outline" size="sm" onClick={handleLinkGoogle} disabled={secBusy}>
+											Link Google
+										</Button>
+									)}
+									{secStatus?.googleLinked && secStatus.canUnlinkGoogle && (
+										<Button variant="outline" size="sm" onClick={handleUnlinkGoogle} disabled={secBusy}>
+											Unlink Google
+										</Button>
+									)}
+								</div>
+							</div>
+
+							{secStatus && !secStatus.hasPassword && (
+								<div className="rounded-lg border p-4 space-y-3">
+									<p className="text-sm font-medium">Set Password</p>
+									<p className="text-xs text-muted-foreground">
+										Set a password so you can also sign in with your email address.
+									</p>
+									<div className="grid gap-2 sm:grid-cols-2">
+										<Input
+											type="password"
+											placeholder="New password (min 8 chars)"
+											value={setPass1}
+											onChange={(e) => setSetPass1(e.target.value)}
+										/>
+										<Input
+											type="password"
+											placeholder="Confirm password"
+											value={setPass2}
+											onChange={(e) => setSetPass2(e.target.value)}
+											onKeyDown={(e) => e.key === "Enter" && handleSetPassword()}
+										/>
+									</div>
+									<Button size="sm" onClick={handleSetPassword} disabled={secBusy || !setPass1 || !setPass2}>
+										Set Password
+									</Button>
+								</div>
+							)}
+
+							{secStatus?.hasPassword && (
+								<div className="rounded-lg border p-4 space-y-3">
+									<p className="text-sm font-medium">Change Password</p>
+									<div className="grid gap-2 sm:grid-cols-3">
+										<Input
+											type="password"
+											placeholder="Current password"
+											value={currentPassword}
+											onChange={(e) => setCurrentPassword(e.target.value)}
+										/>
+										<Input
+											type="password"
+											placeholder="New password"
+											value={newPassword}
+											onChange={(e) => setNewPassword(e.target.value)}
+										/>
+										<Input
+											type="password"
+											placeholder="Confirm new password"
+											value={confirmNewPassword}
+											onChange={(e) => setConfirmNewPassword(e.target.value)}
+											onKeyDown={(e) => e.key === "Enter" && handleChangePassword()}
+										/>
+									</div>
+									<Button
+										size="sm"
+										onClick={handleChangePassword}
+										disabled={secBusy || !currentPassword || !newPassword}
+									>
+										Update Password
+									</Button>
+								</div>
+							)}
+
+							<div className="rounded-lg border p-4 space-y-3">
+								<p className="text-sm font-medium">Change Email</p>
+								<p className="text-xs text-muted-foreground">Current email: {user.email}</p>
+								<div className="flex gap-2">
+									<Input
+										type="email"
+										placeholder="New email address"
+										value={newEmail}
+										onChange={(e) => setNewEmail(e.target.value)}
+									/>
+									<Button size="sm" onClick={handleChangeEmail} disabled={secBusy || !newEmail}>
+										Update Email
+									</Button>
+								</div>
+							</div>
+
 							<div className="flex items-center justify-between">
 								<div>
 									<p className="font-medium">My data</p>
