@@ -1,10 +1,10 @@
-<img style="width: 128px; height: 128px" src="public/favicon.svg" /><h1 style="font-size: 48px"><a href="https://editmash.com">EditMash.com</a> - the multiplayer video editor.</h1>
+<img style="width: 128px; height: 128px" src="public/favicon.svg" /><h1 style="font-size: 48px"><a href="https://editmash.com">mash.catplay.org</a> - the multiplayer video editor.</h1>
 
-[Privacy Policy](https://editmash.com/legal/privacy) | [Terms of Service](https://editmash.com/legal/terms) | [License](LICENSE)
+[Privacy Policy](https://mash.catplay.org/legal/privacy) | [Terms of Service](https://mash.catplay.org/legal/terms) | [License](LICENSE)
 
 ## About
 
-EditMash is a multiplayer collaborative video editor where hundreds of players join timed "matches" to create videos together on a shared timeline. When time expires, the final timeline is rendered and uploaded to the viewable Library.
+CatMash is a multiplayer collaborative video editor where hundreds of players join timed "matches" to create videos together on a shared timeline. When time expires, the final timeline is rendered and uploaded to the viewable Library.
 
 ## Features
 
@@ -42,8 +42,8 @@ Before you begin, make sure you have the following installed:
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/outpoot/editmash.git
-   cd editmash
+   git clone https://github.com/lordpipon/catmash.git
+   cd catmash
    ```
 
 2. **Set up Redis**
@@ -52,7 +52,7 @@ Before you begin, make sure you have the following installed:
 
    Create a Redis Docker container:
    ```bash
-   docker run -d --name editmash-redis -p 6379:6379 -v editmash_redisdata:/data --restart unless-stopped redis:8-alpine redis-server --save 60 1
+   docker run -d --name catmash-redis -p 6379:6379 -v catmash_redisdata:/data --restart unless-stopped redis:8-alpine redis-server --save 60 1
    ```
 
    **Alternative:** You can also [download and install Redis directly](https://redis.io/downloads/) or use a managed Redis service such as [Redis Cloud](https://redis.com/cloud/).
@@ -63,7 +63,7 @@ Before you begin, make sure you have the following installed:
 
    - **Run Postgres locally with Docker:**
      ```bash
-     docker run -d --name editmash-postgres -e POSTGRES_USER=pguser -e POSTGRES_PASSWORD=pgpass -e POSTGRES_DB=editmash -p 5432:5432 -v editmash_pgdata:/var/lib/postgresql/data --restart unless-stopped postgres:16
+     docker run -d --name catmash-postgres -e POSTGRES_USER=pguser -e POSTGRES_PASSWORD=pgpass -e POSTGRES_DB=catmash -p 5432:5432 -v editmash_pgdata:/var/lib/postgresql/data --restart unless-stopped postgres:16
      ```
 
    - **Use a managed cloud Postgres provider:**
@@ -78,7 +78,7 @@ Before you begin, make sure you have the following installed:
 
 4. **Set up Backblaze B2 Storage**
 
-   EditMash uses Backblaze B2 for storing user-uploaded media files (video and audio clips).
+   CatMash uses Backblaze B2 for storing user-uploaded media files (video and audio clips).
 
    - Create a [Backblaze account](https://www.backblaze.com/b2/sign-up.html)
    - Create a new B2 bucket (note the bucket name and region)
