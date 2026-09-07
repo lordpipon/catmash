@@ -16,7 +16,7 @@ export default function TermsOfServicePage() {
 						<HugeiconsIcon icon={ArrowLeft01Icon} className="w-5 h-5" />
 					</Button>
 					<div className="flex items-center gap-2">
-						<img src="/editmash.svg" alt="EditMash Logo" className="w-6 h-6" />
+						<img src="/catmash.png" alt="Catmash Logo" className="w-6 h-6" />
 						<h1 className="text-xl font-bold">Terms of Service</h1>
 					</div>
 				</div>
@@ -30,7 +30,7 @@ export default function TermsOfServicePage() {
 						<h2 className="text-2xl font-bold mb-4">1. Acceptance of Terms</h2>
 						<div className="space-y-3 text-muted-foreground">
 							<p>
-								By accessing or using EditMash (&quot;Service&quot;), operated by Outpoot (&quot;we,&quot; &quot;us,&quot; or
+								By accessing or using Catmash (&quot;Service&quot;), operated by Catplay (&quot;we,&quot; &quot;us,&quot; or
 								&quot;our&quot;), you agree to be bound by these Terms of Service (&quot;Terms&quot;). If you do not agree to these Terms,
 								do not use the Service.
 							</p>
@@ -45,7 +45,7 @@ export default function TermsOfServicePage() {
 						<h2 className="text-2xl font-bold mb-4">2. Description of Service</h2>
 						<div className="space-y-3 text-muted-foreground">
 							<p>
-								EditMash is a multiplayer collaborative video editing platform where users join timed &quot;matches&quot; to collaboratively
+								Catmash is a multiplayer collaborative video editing platform where users join timed &quot;matches&quot; to collaboratively
 								create videos on a shared timeline. Key features include:
 							</p>
 							<ul className="list-disc pl-6 space-y-1">
@@ -61,7 +61,7 @@ export default function TermsOfServicePage() {
 						<h2 className="text-2xl font-bold mb-4">3. Eligibility</h2>
 						<div className="space-y-3 text-muted-foreground">
 							<p>
-								You must be at least <strong className="text-foreground">16 years old</strong> to use EditMash. By using the Service, you
+								You must be at least <strong className="text-foreground">16 years old</strong> to use Catmash. By using the Service, you
 								represent and warrant that you meet this age requirement. If you are under 16, you are not permitted to use the Service.
 							</p>
 						</div>
@@ -70,7 +70,7 @@ export default function TermsOfServicePage() {
 					<section>
 						<h2 className="text-2xl font-bold mb-4">4. Account Registration</h2>
 						<div className="space-y-3 text-muted-foreground">
-							<p>To use EditMash, you must sign in using your Google account. You are responsible for:</p>
+							<p>To use Catmash, you must sign in using your Google account. You are responsible for:</p>
 							<ul className="list-disc pl-6 space-y-1">
 								<li>Maintaining the confidentiality of your Google account credentials</li>
 								<li>All activities that occur under your account</li>
@@ -111,7 +111,7 @@ export default function TermsOfServicePage() {
 							<div>
 								<h3 className="text-lg font-semibold text-foreground mb-2">6.1 Your Content</h3>
 								<p>
-									You retain ownership of any content you upload to EditMash (&quot;Your Content&quot;). By uploading content, you grant us
+									You retain ownership of any content you upload to Catmash (&quot;Your Content&quot;). By uploading content, you grant us
 									a non-exclusive, worldwide, royalty-free license to use, store, display, and process Your Content solely for the purpose
 									of providing the Service.
 								</p>
@@ -145,7 +145,7 @@ export default function TermsOfServicePage() {
 							</div>
 							<div>
 								<h3 className="text-lg font-semibold text-foreground mb-2">6.3 Collaborative Works</h3>
-								<p>Videos created collaboratively through EditMash are joint works. By participating in a match, you agree that:</p>
+								<p>Videos created collaboratively through Catmash are joint works. By participating in a match, you agree that:</p>
 								<ul className="list-disc pl-6 space-y-1 mt-2">
 									<li>Other participants may use, modify, and build upon your contributions within the match</li>
 									<li>The final rendered video is a collaborative work of all participants</li>
@@ -167,10 +167,10 @@ export default function TermsOfServicePage() {
 						<h2 className="text-2xl font-bold mb-4">7. Copyright and DMCA</h2>
 						<div className="space-y-3 text-muted-foreground">
 							<p>
-								We respect intellectual property rights. If you believe content on EditMash infringes your copyright, please send a DMCA
+								We respect intellectual property rights. If you believe content on Catmash infringes your copyright, please send a DMCA
 								takedown notice to{" "}
-								<a href="mailto:support@outpoot.com" className="text-primary hover:underline">
-									support@outpoot.com
+								<a href="mailto:lordpipon@gmail.com" className="text-primary hover:underline">
+									lordpipon@gmail.com
 								</a>{" "}
 								with:
 							</p>
@@ -347,8 +347,8 @@ export default function TermsOfServicePage() {
 							<p>For questions about these Terms, contact us at:</p>
 							<p>
 								<strong className="text-foreground">Email:</strong>{" "}
-								<a href="mailto:support@outpoot.com" className="text-primary hover:underline">
-									support@outpoot.com
+								<a href="mailto:lordpipon@gmail.com" className="text-primary hover:underline">
+									lordpipon@gmail.com
 								</a>
 							</p>
 						</div>

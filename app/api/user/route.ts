@@ -3,7 +3,7 @@ import { getServerSession } from "@/lib/auth";
 import { getDb } from "@/lib/db";
 import { user, session, account, lobbyPlayers, matchPlayers } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
-import { uploadToB2, deleteFileByName, listFileVersions } from "@/lib/b2";
+import { uploadFile, deleteFileByName, listFiles } from "@/lib/fileStorage";
 import { processImage } from "@/lib/image";
 import { getPlayerActiveMatch, getPlayerActiveLobby } from "@/lib/storage";
 import { isNameAppropriate } from "@/lib/moderation";
@@ -77,7 +77,7 @@ export async function PATCH(request: Request) {
 				const processed = await processImage(buffer);
 
 				fileName = `avatars/${userId}-${Date.now()}.webp`;
-				await uploadToB2(processed.buffer, fileName, processed.contentType);
+				await uploadFile(processed.buffer, fileName, processed.contentType);
 
 				proxyUrl = `/api/media/${fileName}`;
 
@@ -102,7 +102,7 @@ export async function PATCH(request: Request) {
 				}
 
 				try {
-					const oldFiles = await listFileVersions(avatarPrefix);
+					const oldFiles = await listFiles(avatarPrefix);
 					for (const oldFile of oldFiles) {
 						if (oldFile.fileName !== fileName) {
 							await deleteFileByName(oldFile.fileName);
@@ -186,7 +186,7 @@ export async function DELETE() {
 		const userId = currentSession.user.id;
 
 		try {
-			const avatarFiles = await listFileVersions(`avatars/${userId}`);
+			const avatarFiles = await listFiles(`avatars/${userId}`);
 			for (const file of avatarFiles) {
 				await deleteFileByName(file.fileName);
 			}
@@ -197,7 +197,7 @@ export async function DELETE() {
 		try {
 			const { matchMedia } = await import("@/lib/db/schema");
 			const { eq } = await import("drizzle-orm");
-			const { deleteFromB2 } = await import("@/lib/b2");
+			const { deleteFile } = await import("@/lib/fileStorage");
 
 			const userMedia = await db
 				.select({ url: matchMedia.url, fileId: matchMedia.fileId })
@@ -211,7 +211,7 @@ export async function DELETE() {
 						if (fileName.startsWith("/api/media/")) {
 							fileName = decodeURIComponent(fileName.split("/api/media/")[1]);
 						}
-						await deleteFromB2(fileName, media.fileId);
+						await deleteFile(fileName, media.fileId);
 					} catch (error) {
 						console.error(`Failed to delete media file ${media.url}:`, error);
 					}

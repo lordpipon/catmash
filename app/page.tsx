@@ -35,8 +35,8 @@ export default function MatchmakingPage() {
 					<div className="container mx-auto px-4 py-4 flex items-center justify-between">
 						<div className="flex items-center gap-4">
 							<div className="flex items-center gap-2">
-								<img src="/editmash.svg" alt="EditMash Logo" className="w-6 h-6" />
-								<h1 className="text-xl font-extrabold">EditMash</h1>
+								<img src="/catmash.png" alt="Catmash Logo" className="w-6 h-6" />
+								<h1 className="text-xl font-extrabold">Catmash</h1>
 							</div>
 							<button
 								onClick={() => router.push("/library")}
@@ -50,11 +50,11 @@ export default function MatchmakingPage() {
 
 				<main className="flex-1 flex items-center justify-center px-4">
 					<div className="max-w-lg text-center space-y-6">
-						<img src="/editmash.svg" alt="EditMash" className="w-16 h-16 mx-auto opacity-50" />
-						<h2 className="text-2xl font-bold">The EditMash experiment has ended</h2>
+						<img src="/catmash.png" alt="Catmash" className="w-16 h-16 mx-auto opacity-50" />
+						<h2 className="text-2xl font-bold">The Catmash experiment has ended</h2>
 						<div className="space-y-3 text-muted-foreground">
 							<p>
-								Thank you to everyone who participated in EditMash! It was incredible seeing the internet create "art."
+								Thank you to everyone who participated in Catmash! It was incredible seeing the internet create "art."
 							</p>
 							<p>
 								Due to the ongoing costs of running the platform, moderation concerns, and other factors, we&apos;ve made the decision to shut down active operations.
@@ -81,8 +81,11 @@ export default function MatchmakingPage() {
 					<a href="/privacy" className="hover:text-foreground transition-colors">
 						Privacy
 					</a>
-					<a href="https://discord.gg/facedev" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
+					<a href="https://discord.gg/NKzq7ppNQK" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
 						Discord
+					</a>
+					<a href="mailto:lordpipon@gmail.com" className="hover:text-foreground transition-colors">
+						Contact
 					</a>
 				</footer>
 			</div>
@@ -380,8 +383,8 @@ export default function MatchmakingPage() {
 				<div className="container mx-auto px-4 py-4 flex items-center justify-between">
 					<div className="flex items-center gap-4">
 						<div className="flex items-center gap-2">
-							<img src="/editmash.svg" alt="EditMash Logo" className="w-6 h-6" />
-							<h1 className="text-xl font-extrabold">EditMash</h1>
+							<img src="/catmash.png" alt="Catmash Logo" className="w-6 h-6" />
+							<h1 className="text-xl font-extrabold">Catmash</h1>
 						</div>
 						<button
 							onClick={() => router.push("/library")}
@@ -748,8 +751,11 @@ export default function MatchmakingPage() {
 				<a href="/privacy" className="hover:text-foreground transition-colors">
 					Privacy
 				</a>
-				<a href="https://discord.gg/facedev" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
+				<a href="https://discord.gg/NKzq7ppNQK" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
 					Discord
+				</a>
+				<a href="mailto:lordpipon@gmail.com" className="hover:text-foreground transition-colors">
+					Contact
 				</a>
 			</footer>
 		</div>

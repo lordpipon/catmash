@@ -52,11 +52,11 @@ export function BannedCheck({ children }: { children: React.ReactNode }) {
 			<div className="min-h-screen bg-background flex items-center justify-center p-4">
 				<div className="text-center max-w-md">
 					<h1 className="text-2xl font-bold text-destructive mb-4">Oh nuh nu nu nu nu</h1>
-					<p className="text-muted-foreground mb-6">Your account has been banned from EditMash.</p>
+					<p className="text-muted-foreground mb-6">Your account has been banned from Catmash.</p>
 					<p className="text-muted-foreground">
 						If you believe this is a mistake, please{" "}
 						<a
-							href="https://discord.gg/facedev"
+							href="https://discord.gg/NKzq7ppNQK"
 							target="_blank"
 							rel="noopener noreferrer"
 							className="text-primary hover:underline font-medium"

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { uploadToB2 } from "@/lib/b2";
+import { uploadFile } from "@/lib/fileStorage";
 import { validateFile, getFileExtension, getFileCategory } from "@/lib/validation";
 import { validateVideoFile, validateImageFile } from "@/lib/mediaValidation";
 import { auth } from "@/lib/auth";
@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
 		const randomString = Math.random().toString(36).substring(7);
 		const fileName = `media/${timestamp}_${randomString}.${extension}`;
 
-		const uploadedFile = await uploadToB2(buffer, fileName, file.type);
+		const uploadedFile = await uploadFile(buffer, fileName, file.type);
 
 		return NextResponse.json({
 			url: uploadedFile.url,

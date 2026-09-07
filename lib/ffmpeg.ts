@@ -641,7 +641,7 @@ export async function renderTimeline(
 }
 
 export async function downloadMediaFiles(mediaUrls: Record<string, string>): Promise<Map<string, string>> {
-	const tempBase = path.join(os.tmpdir(), "editmash");
+	const tempBase = path.join(os.tmpdir(), "catmash");
 	await fs.mkdir(tempBase, { recursive: true });
 	const tempDir = await fs.mkdtemp(path.join(tempBase, path.sep));
 	const fileMap = new Map<string, string>();

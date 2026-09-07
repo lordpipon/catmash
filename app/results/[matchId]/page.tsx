@@ -136,7 +136,7 @@ export default function ResultsPage({ params }: { params: Promise<{ matchId: str
 							<HugeiconsIcon icon={ArrowLeft01Icon} className="w-5 h-5" />
 						</Button>
 						<div className="flex items-center gap-3">
-							<img src="/editmash.svg" alt="EditMash Logo" className="w-6 h-6" />
+							<img src="/catmash.png" alt="Catmash Logo" className="w-6 h-6" />
 							<h1 className="text-xl font-bold">{match.lobbyName}</h1>
 						</div>
 					</div>

@@ -257,7 +257,7 @@ export default function MediaBrowser() {
 
 						URL.revokeObjectURL(tempUrl);
 					} catch (error) {
-						console.error("Error uploading to B2:", error);
+						console.error("Error uploading media:", error);
 
 						const errorMessage = error instanceof Error ? error.message : "Upload failed";
 						mediaStore.updateItem(itemId, {
@@ -349,7 +349,7 @@ export default function MediaBrowser() {
 
 					URL.revokeObjectURL(tempUrl);
 				} catch (error) {
-					console.error("Error uploading to B2:", error);
+					console.error("Error uploading media:", error);
 
 					const errorMessage = error instanceof Error ? error.message : "Upload failed";
 					mediaStore.updateItem(itemId, {

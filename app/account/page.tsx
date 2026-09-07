@@ -290,7 +290,7 @@ export default function AccountPage() {
 			const blob = await response.blob();
 			const contentDisposition = response.headers.get("Content-Disposition");
 			const filenameMatch = contentDisposition?.match(/filename="(.+)"/);
-			const filename = filenameMatch?.[1] || "editmash-data-export.json";
+			const filename = filenameMatch?.[1] || "catmash-data-export.json";
 
 			const url = URL.createObjectURL(blob);
 			const a = document.createElement("a");
@@ -343,7 +343,7 @@ export default function AccountPage() {
 							<HugeiconsIcon icon={ArrowLeft01Icon} className="w-5 h-5" />
 						</Button>
 						<div className="flex items-center gap-2">
-							<img src="/editmash.svg" alt="EditMash Logo" className="w-6 h-6" />
+							<img src="/catmash.png" alt="Catmash Logo" className="w-6 h-6" />
 							<h1 className="text-xl font-bold">Account</h1>
 						</div>
 					</div>

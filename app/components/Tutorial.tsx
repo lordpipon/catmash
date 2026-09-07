@@ -33,9 +33,9 @@ interface TutorialStep {
 const tutorialSteps: TutorialStep[] = [
 	{
 		id: "welcome",
-		title: "Welcome to EditMash! 🙂",
+		title: "Welcome to Catmash! 🙂",
 		description:
-			"EditMash is a multiplayer collaborative video editor where hundreds of players join timed matches to create chaotic, entertaining videos together. Let's show you how it works!",
+			"Catmash is a multiplayer collaborative video editor where hundreds of players join timed matches to create chaotic, entertaining videos together. Let's show you how it works!",
 		position: "center",
 	},
 	{

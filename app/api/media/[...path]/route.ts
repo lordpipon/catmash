@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { downloadFromB2 } from "@/lib/b2";
+import { downloadFile } from "@/lib/fileStorage";
 import { ALL_ALLOWED_MIME_TYPES, getMimeTypeFromExtension } from "@/lib/validation";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { isSiteClosed } from "@/lib/site-utils";
 
 const CACHE_MAX_AGE = 3600; // 1 hour
-const ALLOWED_PREFIXES = ["avatars/", "renders/"];
+const ALLOWED_PREFIXES = ["avatars/", "renders/", "media/"];
+const PUBLIC_PREFIXES = ["media/"];
 
 function validatePath(fileName: string): { valid: boolean; error?: string } {
 	if (!ALLOWED_PREFIXES.some((prefix) => fileName.startsWith(prefix))) {
@@ -37,7 +38,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
 		const fileName = path.join("/");
 
-		if (!isSiteClosed()) {
+		if (!isSiteClosed() && !PUBLIC_PREFIXES.some((prefix) => fileName.startsWith(prefix))) {
 			const session = await auth.api.getSession({ headers: await headers() });
 			if (!session?.user) {
 				return NextResponse.json({ error: "Authentication required" }, { status: 401 });
@@ -58,7 +59,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
 		const rangeHeader = request.headers.get("range");
 
-		const buffer = await downloadFromB2(fileName);
+		const buffer = await downloadFile(fileName);
 
 		if (rangeHeader) {
 			const matches = rangeHeader.match(/bytes=(\d+)-(\d*)/);
@@ -125,7 +126,7 @@ export async function HEAD(request: NextRequest, { params }: { params: Promise<{
 		const fileName = path.join("/");
 
 		const session = await auth.api.getSession({ headers: await headers() });
-		if (!session?.user) {
+		if (!session?.user && !PUBLIC_PREFIXES.some((prefix) => fileName.startsWith(prefix))) {
 			return new NextResponse(null, { status: 401 });
 		}
 
@@ -141,7 +142,7 @@ export async function HEAD(request: NextRequest, { params }: { params: Promise<{
 			return new NextResponse(null, { status: 500 });
 		}
 
-		const buffer = await downloadFromB2(fileName);
+		const buffer = await downloadFile(fileName);
 
 		return new NextResponse(null, {
 			status: 200,

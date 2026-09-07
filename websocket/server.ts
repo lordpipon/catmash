@@ -407,6 +407,6 @@ const server = Bun.serve({
 
 });
 
-console.log(`[WS] EditMash WebSocket server running on port ${PORT}${CLOSE_SITE ? " (ARCHIVE MODE — rejecting all connections)" : ""}`);
+console.log(`[WS] Catmash WebSocket server running on port ${PORT}${CLOSE_SITE ? " (ARCHIVE MODE — rejecting all connections)" : ""}`);
 
 export { server, broadcast, matchPlayers, connections };

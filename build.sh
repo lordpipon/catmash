@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "🚀 Starting EditMash deployment..."
+echo "🚀 Starting Catmash deployment..."
 echo "📥 Pulling latest changes..."
 git pull
 

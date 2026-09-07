@@ -1,6 +1,6 @@
 services:
   app:
-    container_name: editmash-app
+    container_name: catmash-app
     build:
       context: .
       target: production-main
@@ -10,17 +10,22 @@ services:
     env_file:
       - .env
     environment:
-      - WS_SERVER_URL=http://editmash-websocket:8080
+      - WS_SERVER_URL=http://catmash-websocket:8080
+      - MEDIA_STORAGE_PATH=/data
+      - DATABASE_URL=postgresql://pguser:pgpass@postgres:5432/catmash
+      - REDIS_URL=redis://redis:6379
+    volumes:
+      - catmash-media:/data
     depends_on:
       - websocket
+      - postgres
+      - redis
     restart: unless-stopped
     networks:
-      shared_backend:
-        aliases:
-          - editmash-app
+      - shared_backend
 
   websocket:
-    container_name: editmash-websocket
+    container_name: catmash-websocket
     build:
       context: .
       target: production-websocket
@@ -29,12 +34,40 @@ services:
       - "8084:8080"
     env_file:
       - websocket/.env
+    depends_on:
+      - redis
     restart: unless-stopped
     networks:
-      shared_backend:
-        aliases:
-          - editmash-websocket
+      - shared_backend
+
+  postgres:
+    image: postgres:16
+    container_name: catmash-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: pguser
+      POSTGRES_PASSWORD: pgpass
+      POSTGRES_DB: catmash
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - shared_backend
+
+  redis:
+    image: redis:8-alpine
+    container_name: catmash-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - redisdata:/data
+    networks:
+      - shared_backend
 
 networks:
   shared_backend:
-    external: true
+    driver: bridge
+
+volumes:
+  catmash-media:
+  pgdata:
+  redisdata:

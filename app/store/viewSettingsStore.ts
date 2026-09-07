@@ -2,7 +2,7 @@ import { ViewSettings } from "../components/TopBar";
 
 type Listener = () => void;
 
-const STORAGE_KEY = "editmash_view_settings";
+const STORAGE_KEY = "catmash_view_settings";
 
 const defaultSettings: ViewSettings = {
 	showShineEffect: true,

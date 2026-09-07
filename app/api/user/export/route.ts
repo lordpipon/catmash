@@ -156,7 +156,7 @@ export async function GET() {
 		};
 
 		const jsonString = JSON.stringify(exportData, null, 2);
-		const filename = `editmash-data-export-${userData.id}-${new Date().toISOString().split("T")[0]}.json`;
+		const filename = `catmash-data-export-${userData.id}-${new Date().toISOString().split("T")[0]}.json`;
 
 		return new NextResponse(jsonString, {
 			status: 200,

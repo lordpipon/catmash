@@ -59,11 +59,11 @@ export default function TopBar({ timeRemaining, playersOnline, onUndo, onRedo }:
 		};
 	}, []);
 
-	const menuItems = ["EditMash", "File", "Edit", "View", "Help"];
+	const menuItems = ["Catmash", "File", "Edit", "View", "Help"];
 
 	const handleMenuClick = useCallback(
 		(item: string) => {
-			if (item === "EditMash") {
+			if (item === "Catmash") {
 				router.push("/");
 			}
 		},

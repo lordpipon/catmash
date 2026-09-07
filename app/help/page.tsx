@@ -29,7 +29,7 @@ export default function HelpPage() {
 						<HugeiconsIcon icon={ArrowLeft01Icon} className="w-5 h-5" />
 					</Button>
 					<div className="flex items-center gap-2">
-						<img src="/editmash.svg" alt="EditMash Logo" className="w-6 h-6" />
+						<img src="/catmash.png" alt="Catmash Logo" className="w-6 h-6" />
 						<h1 className="text-xl font-bold">Help</h1>
 					</div>
 				</div>
@@ -37,9 +37,9 @@ export default function HelpPage() {
 
 			<main className="container mx-auto px-4 py-8 max-w-3xl space-y-8">
 				<section>
-					<h2 className="text-2xl font-bold mb-4">What is EditMash?</h2>
+					<h2 className="text-2xl font-bold mb-4">What is Catmash?</h2>
 					<p className="text-muted-foreground mb-4">
-						EditMash is a multiplayer collaborative video editor where multiple players join timed &quot;matches&quot; to create videos
+						Catmash is a multiplayer collaborative video editor where multiple players join timed &quot;matches&quot; to create videos
 						together on a shared timeline. The goal is entertainment and creative chaos — work with others to create something unique!
 					</p>
 				</section>
@@ -259,8 +259,8 @@ export default function HelpPage() {
 								</p>
 								<p className="mt-2">
 									If you encounter any issues, contact{" "}
-									<a href="mailto:support@outpoot.com" className="text-primary hover:underline">
-										support@outpoot.com
+									<a href="mailto:lordpipon@gmail.com" className="text-primary hover:underline">
+										lordpipon@gmail.com
 									</a>
 									.
 								</p>
@@ -309,15 +309,15 @@ export default function HelpPage() {
 								Can&apos;t find what you&apos;re looking for? Encountered a bug? Have a feature request?
 							</p>
 							<div className="flex flex-col gap-2">
-								<a href="https://discord.gg/facedev" target="_blank" rel="noopener noreferrer">
+								<a href="https://discord.gg/NKzq7ppNQK" target="_blank" rel="noopener noreferrer">
 									<Button className="w-full" variant="default">
 										Join our Discord server
 									</Button>
 								</a>
 								<p className="text-sm text-center text-muted-foreground">
 									or email us at{" "}
-									<a href="mailto:support@outpoot.com" className="text-primary font-medium hover:underline">
-										support@outpoot.com
+									<a href="mailto:lordpipon@gmail.com" className="text-primary font-medium hover:underline">
+										lordpipon@gmail.com
 									</a>
 								</p>
 							</div>

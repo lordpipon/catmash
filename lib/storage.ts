@@ -958,7 +958,7 @@ export async function deleteMatchMedia(matchId: string): Promise<void> {
 	await database.delete(matchMedia).where(eq(matchMedia.matchId, matchId));
 
 	if (mediaFiles.length > 0) {
-		const { deleteMultipleFromB2 } = await import("./b2");
+		const { deleteFiles } = await import("./fileStorage");
 
 		const filesToDelete = mediaFiles
 			.filter((file) => file.fileId && file.fileName)
@@ -973,18 +973,18 @@ export async function deleteMatchMedia(matchId: string): Promise<void> {
 
 		if (filesToDelete.length > 0) {
 			try {
-				const results = await deleteMultipleFromB2(filesToDelete);
+				const results = await deleteFiles(filesToDelete);
 				const failures = results.filter((r) => !r.success);
 				if (failures.length > 0) {
 					console.error(
-						`Failed to delete ${failures.length}/${results.length} match media files from B2:`,
+						`Failed to delete ${failures.length}/${results.length} match media files:`,
 						failures.map((f) => `${f.fileName}: ${f.error}`).join(", ")
 					);
 				} else {
-					console.log(`Successfully deleted ${results.length} match media files from B2`);
+					console.log(`Successfully deleted ${results.length} match media files`);
 				}
 			} catch (error) {
-				console.error("Error deleting match media from B2:", error);
+				console.error("Error deleting match media files:", error);
 			}
 		}
 	}

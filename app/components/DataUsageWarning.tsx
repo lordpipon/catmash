@@ -29,7 +29,7 @@ export function DataUsageWarning() {
 
 					<div className="space-y-4 py-2">
 						<DialogDescription className="text-base leading-relaxed">
-							EditMash matches consume significant bandwidth. Be aware of the following:
+							Catmash matches consume significant bandwidth. Be aware of the following:
 						</DialogDescription>
 
 						<div className="space-y-3 text-sm">

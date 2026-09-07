@@ -4,7 +4,7 @@ import { user, matches, matchMedia } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import { deleteMultipleFromB2, deleteFileByName } from "@/lib/b2";
+import { deleteFiles, deleteFileByName } from "@/lib/fileStorage";
 import { isSiteClosed, siteClosedResponse } from "@/lib/site-utils";
 
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ matchId: string }> }) {
@@ -37,7 +37,9 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
 	const filesToDelete: Array<{ fileName: string; fileId: string }> = [];
 	for (const media of mediaFiles) {
 		if (media.fileId && media.url) {
-			const urlMatch = media.url.match(/\/file\/[^/]+\/(.+)$/);
+			const mediaMatch = media.url.match(/\/api\/media\/(.+)$/);
+			const b2Match = media.url.match(/\/file\/[^/]+\/(.+)$/);
+			const urlMatch = mediaMatch || b2Match;
 			if (urlMatch) {
 				const fileName = decodeURIComponent(urlMatch[1]);
 				filesToDelete.push({ fileName, fileId: media.fileId });
@@ -47,9 +49,9 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
 
 	if (filesToDelete.length > 0) {
 		try {
-			await deleteMultipleFromB2(filesToDelete);
+			await deleteFiles(filesToDelete);
 		} catch (error) {
-			console.error("Error deleting media from B2:", error);
+			console.error("Error deleting media files:", error);
 		}
 	}
 
@@ -60,7 +62,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
 			try {
 				await deleteFileByName(renderFileName);
 			} catch (error) {
-				console.error("Error deleting render from B2:", error);
+				console.error("Error deleting render file:", error);
 			}
 		}
 	}

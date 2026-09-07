@@ -144,8 +144,8 @@ export default function LibraryPage() {
 							<HugeiconsIcon icon={ArrowLeft01Icon} className="w-5 h-5" />
 						</Button>
 						<div className="flex items-center gap-2">
-							<img src="/editmash.svg" alt="EditMash Logo" className="w-6 h-6" />
-							<h1 className="text-xl font-extrabold">EditMash</h1>
+							<img src="/catmash.png" alt="Catmash Logo" className="w-6 h-6" />
+							<h1 className="text-xl font-extrabold">Catmash</h1>
 							<span className="text-xs font-medium text-muted-foreground">Library</span>
 						</div>
 					</div>

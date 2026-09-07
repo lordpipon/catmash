@@ -8,7 +8,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	const { matchId } = await params;
 
 	try {
-		const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://editmash.com";
+		const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://mash.catplay.org";
 		const response = await fetch(`${baseUrl}/api/matches/${matchId}?results=true`, {
 			next: { revalidate: 60 },
 		});
@@ -21,11 +21,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 			const duration = match.config?.timelineDuration || 30;
 
 			const title = `${match.lobbyName} — Results`;
-			const description = `Watch this ${duration}s collaborative video made by ${playerCount} players with ${editCount} edits on EditMash!`;
+			const description = `Watch this ${duration}s collaborative video made by ${playerCount} players with ${editCount} edits on Catmash!`;
 
 			const images = match.renderUrl
 				? [{ url: match.renderUrl.replace(/\.mp4$/, "_thumb.jpg"), width: 1280, height: 720, alt: match.lobbyName }]
-				: [{ url: "/apple-touch-icon.png", width: 512, height: 512, alt: "EditMash Logo" }];
+				: [{ url: "/apple-touch-icon.png", width: 512, height: 512, alt: "Catmash Logo" }];
 
 			return {
 				title,
@@ -52,7 +52,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	return {
 		title: "Match Results",
 		description:
-			"Watch the chaotic result of a collaborative video editing match on EditMash. See what happens when multiple players edit the same timeline!",
+			"Watch the chaotic result of a collaborative video editing match on Catmash. See what happens when multiple players edit the same timeline!",
 	};
 }
 

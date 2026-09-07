@@ -16,7 +16,7 @@ export default function PrivacyPolicyPage() {
 						<HugeiconsIcon icon={ArrowLeft01Icon} className="w-5 h-5" />
 					</Button>
 					<div className="flex items-center gap-2">
-						<img src="/editmash.svg" alt="EditMash Logo" className="w-6 h-6" />
+						<img src="/catmash.png" alt="Catmash Logo" className="w-6 h-6" />
 						<h1 className="text-xl font-bold">Privacy Policy</h1>
 					</div>
 				</div>
@@ -30,12 +30,12 @@ export default function PrivacyPolicyPage() {
 						<h2 className="text-4xl font-bold mb-4">1. Introduction</h2>
 						<div className="space-y-3 text-muted-foreground">
 							<p>
-								EditMash (&quot;we,&quot; &quot;us,&quot; or &quot;our&quot;) is committed to protecting your privacy. This Privacy Policy
+								Catmash (&quot;we,&quot; &quot;us,&quot; or &quot;our&quot;) is committed to protecting your privacy. This Privacy Policy
 								explains how we collect, use, disclose, and safeguard your information when you use our multiplayer collaborative video
-								editing platform at editmash.com (the &quot;Service&quot;).
+								editing platform at catmash.com (the &quot;Service&quot;).
 							</p>
 							<p>
-								By using EditMash, you agree to the collection and use of information in accordance with this policy. If you do not agree
+								By using Catmash, you agree to the collection and use of information in accordance with this policy. If you do not agree
 								with this policy, please do not use our Service.
 							</p>
 						</div>
@@ -65,7 +65,7 @@ export default function PrivacyPolicyPage() {
 
 							<div>
 								<h3 className="text-lg font-semibold text-foreground mb-2">2.2 User-Generated Content</h3>
-								<p>When you use EditMash, we store:</p>
+								<p>When you use Catmash, we store:</p>
 								<ul className="list-disc pl-6 space-y-1">
 									<li>
 										<strong className="text-foreground">Media files:</strong> Videos, audio, and images you upload during matches
@@ -149,7 +149,7 @@ export default function PrivacyPolicyPage() {
 										<strong className="text-foreground">Google:</strong> For authentication (OAuth 2.0)
 									</li>
 									<li>
-										<strong className="text-foreground">Backblaze B2:</strong> For secure cloud storage of media files and avatars
+										<strong className="text-foreground">File Storage:</strong> For secure storage of media files and avatars
 									</li>
 								</ul>
 							</div>
@@ -288,8 +288,8 @@ export default function PrivacyPolicyPage() {
 							</p>
 							<p>
 								To exercise any of these rights, contact us at{" "}
-								<a href="mailto:support@outpoot.com" className="text-primary hover:underline">
-									support@outpoot.com
+								<a href="mailto:lordpipon@gmail.com" className="text-primary hover:underline">
+									lordpipon@gmail.com
 								</a>
 								. We will respond within 30 days.
 							</p>
@@ -322,8 +322,8 @@ export default function PrivacyPolicyPage() {
 							</p>
 							<p>
 								To exercise your rights, contact us at{" "}
-								<a href="mailto:support@outpoot.com" className="text-primary hover:underline">
-									support@outpoot.com
+								<a href="mailto:lordpipon@gmail.com" className="text-primary hover:underline">
+									lordpipon@gmail.com
 								</a>
 								.
 							</p>
@@ -336,7 +336,7 @@ export default function PrivacyPolicyPage() {
 							<p>
 								Our servers are located in <strong className="text-foreground">Germany</strong>. Your data is primarily stored and processed
 								in Germany in compliance with European data protection standards. We use service providers located in the United States
-								(Backblaze B2 for media storage, Google for authentication). By using the Service, you consent to such transfers. We take
+								(Google for authentication). By using the Service, you consent to such transfers. We take
 								appropriate safeguards to protect your data in accordance with applicable laws.
 							</p>
 						</div>
@@ -346,12 +346,12 @@ export default function PrivacyPolicyPage() {
 						<h2 className="text-4xl font-bold mb-4">11. Age Requirements</h2>
 						<div className="space-y-3 text-muted-foreground">
 							<p>
-								EditMash is not intended for individuals under <strong className="text-foreground">16 years of age</strong>. We do not
+								Catmash is not intended for individuals under <strong className="text-foreground">16 years of age</strong>. We do not
 								knowingly collect personal information from individuals under 16. If we learn we have collected information from someone
 								under 16, we will delete it immediately. If you believe someone under 16 has provided us with personal information, please
 								contact us at{" "}
-								<a href="mailto:support@outpoot.com" className="text-primary hover:underline">
-									support@outpoot.com
+								<a href="mailto:lordpipon@gmail.com" className="text-primary hover:underline">
+									lordpipon@gmail.com
 								</a>
 								.
 							</p>
@@ -392,8 +392,8 @@ export default function PrivacyPolicyPage() {
 							<p>If you have any questions about this Privacy Policy or our data practices, contact us at:</p>
 							<p>
 								<strong className="text-foreground">Email:</strong>{" "}
-								<a href="mailto:support@outpoot.com" className="text-primary hover:underline">
-									support@outpoot.com
+								<a href="mailto:lordpipon@gmail.com" className="text-primary hover:underline">
+									lordpipon@gmail.com
 								</a>
 							</p>
 						</div>

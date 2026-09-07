@@ -1,10 +1,10 @@
-<img style="width: 128px; height: 128px" src="public/favicon.svg" /><h1 style="font-size: 48px"><a href="https://editmash.com">mash.catplay.org</a> - the multiplayer video editor.</h1>
+ <img style="width: 128px; height: 128px" src="public/catmash.png" /><h1 style="font-size: 48px"><a href="https://mash.catplay.org">mash.catplay.org</a> - the multiplayer video editor.</h1>
 
 [Privacy Policy](https://mash.catplay.org/legal/privacy) | [Terms of Service](https://mash.catplay.org/legal/terms) | [License](LICENSE)
 
 ## About
 
-CatMash is a multiplayer collaborative video editor where hundreds of players join timed "matches" to create videos together on a shared timeline. When time expires, the final timeline is rendered and uploaded to the viewable Library.
+Catmash is a multiplayer collaborative video editor where hundreds of players join timed "matches" to create videos together on a shared timeline. When time expires, the final timeline is rendered and uploaded to the viewable Library.
 
 ## Features
 
@@ -63,7 +63,7 @@ Before you begin, make sure you have the following installed:
 
    - **Run Postgres locally with Docker:**
      ```bash
-     docker run -d --name catmash-postgres -e POSTGRES_USER=pguser -e POSTGRES_PASSWORD=pgpass -e POSTGRES_DB=catmash -p 5432:5432 -v editmash_pgdata:/var/lib/postgresql/data --restart unless-stopped postgres:16
+     docker run -d --name catmash-postgres -e POSTGRES_USER=pguser -e POSTGRES_PASSWORD=pgpass -e POSTGRES_DB=catmash -p 5432:5432 -v catmash_pgdata:/var/lib/postgresql/data --restart unless-stopped postgres:16
      ```
 
    - **Use a managed cloud Postgres provider:**
@@ -76,18 +76,11 @@ Before you begin, make sure you have the following installed:
    npx drizzle-kit push
    ```
 
-4. **Set up Backblaze B2 Storage**
+4. **File Storage (Local)**
 
-   CatMash uses Backblaze B2 for storing user-uploaded media files (video and audio clips).
+   Catmash stores user-uploaded media files (video and audio clips) on local disk via a Docker volume.
 
-   - Create a [Backblaze account](https://www.backblaze.com/b2/sign-up.html)
-   - Create a new B2 bucket (note the bucket name and region)
-   - Generate application keys (Application Key ID and Application Key)
-   - Configure CORS rules for your bucket:
-     ```bash
-     # Install B2 CLI: https://www.backblaze.com/docs/cloud-storage-command-line-tools
-     b2 bucket update --cors-rules "$(cat ./cors-rules.json)" <bucketName> allPublic
-     ```
+   The default path is `./data` (relative to the server working directory) and can be overridden with the `MEDIA_STORAGE_PATH` environment variable. The `docker-compose.yml` already mounts a persistent volume at `/data` for the production containers.
 
 5. **Configure Google OAuth**
 
@@ -110,7 +103,7 @@ Before you begin, make sure you have the following installed:
 
    ```ini
    # --- Database ---
-   DATABASE_URL=postgres://pguser:pgpass@localhost:5432/editmash
+   DATABASE_URL=postgres://pguser:pgpass@localhost:5432/catmash
 
    # --- Redis ---
    REDIS_URL=redis://localhost:6379
@@ -119,16 +112,12 @@ Before you begin, make sure you have the following installed:
    BETTER_AUTH_SECRET=your_random_secret_here_minimum_32_chars
    BETTER_AUTH_URL=http://localhost:3000  # Change to your production URL in production
 
-   # --- Google OAuth ---
-   GOOGLE_CLIENT_ID=your_google_client_id
-   GOOGLE_CLIENT_SECRET=your_google_client_secret
+    # --- Google OAuth ---
+    GOOGLE_CLIENT_ID=your_google_client_id
+    GOOGLE_CLIENT_SECRET=your_google_client_secret
 
-   # --- Backblaze B2 Storage ---
-   B2_APPLICATION_KEY_ID=your_b2_key_id
-   B2_APPLICATION_KEY=your_b2_application_key
-   B2_BUCKET_NAME=your_bucket_name
-   B2_BUCKET_ID=your_bucket_id
-   B2_REGION=us-west-004  # Your bucket region
+    # --- Local file storage ---
+    MEDIA_STORAGE_PATH=./data
 
    # --- WebSocket Server ---
    NEXT_PUBLIC_WS_URL=ws://localhost:8080
@@ -152,7 +141,7 @@ Before you begin, make sure you have the following installed:
    WS_API_KEY=your_secure_random_key_here  # Must match the key used by Next.js app
 
    # --- Database (same as root .env) ---
-   DATABASE_URL=postgres://pguser:pgpass@localhost:5432/editmash
+   DATABASE_URL=postgres://pguser:pgpass@localhost:5432/catmash
 
    # --- Redis (same as root .env) ---
    REDIS_URL=redis://localhost:6379
@@ -199,7 +188,7 @@ Before you begin, make sure you have the following installed:
 
 3. **Verify FFmpeg Installation**
 
-   EditMash requires FFmpeg for rendering final videos. Verify it's installed:
+   CatMash requires FFmpeg for rendering final videos. Verify it's installed:
    ```bash
    ffmpeg -version
    ```
@@ -227,4 +216,4 @@ Before you begin, make sure you have the following installed:
 
 This project is licensed under the **Creative Commons Attribution-NonCommercial 4.0 International** License (**CC BY-NC 4.0**). See the [LICENSE](LICENSE) file for details.
 
-Made by [FaceDev](https://youtube.com/@FaceDevStuff) (:
+Made by Catplay — Discord: https://discord.gg/NKzq7ppNQK — Contact: lordpipon@gmail.com

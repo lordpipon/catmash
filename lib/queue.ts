@@ -1,6 +1,6 @@
 import { RenderJob } from "../app/types/render";
 import { renderTimeline, downloadMediaFiles, cleanupTempFiles, hasContentClips } from "./ffmpeg";
-import { uploadToB2, deleteMultipleFromB2 } from "./b2";
+import { uploadFile, deleteFiles } from "./fileStorage";
 import { getRedis, closeRedisConnection } from "./redis";
 import { getMatchByIdInternal, updateMatchRender, updateMatchStatus, updateLobbyMatchId, updateLobbyStatus, deleteMatchMedia } from "./storage";
 import fs from "fs/promises";
@@ -295,7 +295,7 @@ async function processNextJob(): Promise<void> {
 			}
 		}
 
-		const outputDir = path.join(os.tmpdir(), "editmash", "renders");
+		const outputDir = path.join(os.tmpdir(), "catmash", "renders");
 		await fs.mkdir(outputDir, { recursive: true });
 		const outputFileName = `render_${matchId || jobId}.mp4`;
 		const outputPath = path.join(outputDir, outputFileName);
@@ -313,15 +313,15 @@ async function processNextJob(): Promise<void> {
 			}
 		});
 
-		console.log(`[Queue] Job ${jobId}: Render complete, uploading to B2`);
+		console.log(`[Queue] Job ${jobId}: Render complete, saving to storage`);
 		await updateJob(jobId, { progress: 80 });
 		if (matchId) {
 			await setRenderProgress(matchId, 80);
 		}
 
 		const outputBuffer = await fs.readFile(outputPath);
-		const b2FileName = `renders/${outputFileName}`;
-		const uploadedFile = await uploadToB2(outputBuffer, b2FileName, "video/mp4", (uploadProgress) => {
+		const storageFileName = `renders/${outputFileName}`;
+		const uploadedFile = await uploadFile(outputBuffer, storageFileName, "video/mp4", (uploadProgress) => {
 			const adjustedProgress = 80 + (uploadProgress / 100) * 20;
 			updateJob(jobId || "", { progress: adjustedProgress }).catch((err) => {
 				console.error(`Error updating upload progress for job ${jobId}:`, err);
@@ -385,7 +385,7 @@ async function processNextJob(): Promise<void> {
 	} finally {
 		if (job && job.sourceFileIds && job.sourceFileIds.length > 0) {
 			try {
-				const deleteResults = await deleteMultipleFromB2(job.sourceFileIds);
+				const deleteResults = await deleteFiles(job.sourceFileIds);
 				const failures = deleteResults.filter((r) => !r.success);
 				if (failures.length > 0) {
 					console.error(

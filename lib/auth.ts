@@ -5,9 +5,9 @@ import { getDb } from "./db";
 import { user as userTable } from "./db/schema";
 import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
-import { uploadToB2 } from "./b2";
+import { uploadFile } from "./fileStorage";
 
-async function uploadAvatarToB2(googleImageUrl: string, userId: string): Promise<string | null> {
+async function uploadAvatarToStorage(googleImageUrl: string, userId: string): Promise<string | null> {
 	try {
 		const highResUrl = googleImageUrl.replace(/=s\d+-c$/, "=s256-c");
 
@@ -22,16 +22,16 @@ async function uploadAvatarToB2(googleImageUrl: string, userId: string): Promise
 		const extension = contentType.includes("png") ? "png" : "jpg";
 		const fileName = `avatars/${userId}.${extension}`;
 
-		const uploadResult = await uploadToB2(buffer, fileName, contentType);
+		const uploadResult = await uploadFile(buffer, fileName, contentType);
 
 		if (!uploadResult || !uploadResult.fileId || !uploadResult.fileName) {
-			console.error("Upload to B2 failed: invalid upload result");
+			console.error("Upload to file storage failed: invalid upload result");
 			return null;
 		}
 
 		return `/api/media/${fileName}`;
 	} catch (error) {
-		console.error("Failed to upload avatar to B2:", error);
+		console.error("Failed to upload avatar to file storage:", error);
 		return null;
 	}
 }
@@ -70,10 +70,10 @@ export const auth = betterAuth({
 			create: {
 				after: async (user) => {
 					if (user.image && user.image.includes("googleusercontent.com")) {
-						const b2Url = await uploadAvatarToB2(user.image, user.id);
-						if (b2Url) {
+						const storageUrl = await uploadAvatarToStorage(user.image, user.id);
+						if (storageUrl) {
 							const database = getDb();
-							await database.update(userTable).set({ image: b2Url }).where(eq(userTable.id, user.id));
+							await database.update(userTable).set({ image: storageUrl }).where(eq(userTable.id, user.id));
 						}
 					}
 				},

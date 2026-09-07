@@ -9,7 +9,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	const { lobbyId } = await params;
 
 	try {
-		const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://editmash.com";
+		const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://mash.catplay.org";
 		const response = await fetch(`${baseUrl}/api/lobbies/${lobbyId}`, {
 			next: { revalidate: 30 },
 		});
@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 		if (response.ok) {
 			const lobby: Lobby = await response.json();
 			const title = `${lobby.name} — Lobby`;
-			const description = `Join "${lobby.name}" on EditMash! ${lobby.players?.length || 0}/${
+			const description = `Join "${lobby.name}" on Catmash! ${lobby.players?.length || 0}/${
 				lobby.matchConfig?.maxPlayers || "?"
 			} players. Create chaotic videos together in a ${lobby.matchConfig?.timelineDuration || 30}s timeline.`;
 
@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 							url: "/apple-touch-icon.png",
 							width: 512,
 							height: 512,
-							alt: "EditMash Logo",
+							alt: "Catmash Logo",
 						},
 					],
 				},
@@ -53,7 +53,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 	return {
 		title: "Join Lobby",
-		description: "Join this EditMash lobby and collaborate with other players to create chaotic videos on a shared timeline.",
+		description: "Join this Catmash lobby and collaborate with other players to create chaotic videos on a shared timeline.",
 		robots: {
 			index: false,
 			follow: false,

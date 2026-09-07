@@ -7,13 +7,13 @@ import "./globals.css";
 const fontSans = Inter({ subsets: ["latin"], variable: "--font-sans" });
 const fontMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://editmash.com";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://mash.catplay.org";
 
 export const metadata: Metadata = {
 	metadataBase: new URL(siteUrl),
 	title: {
-		default: "EditMash",
-		template: "%s | EditMash",
+		default: "Catmash",
+		template: "%s | Catmash",
 	},
 	description:
 		"Join timed matches and collaborate with dozens of players to create short, chaotic videos on a shared timeline. No skill required — just fun and creativity.",
@@ -28,15 +28,12 @@ export const metadata: Metadata = {
 		"timed matches",
 		"creative chaos",
 		"video collaboration",
-		"facedev",
-		"outpoot",
+		"catmash",
+		"catplay",
 	],
-	authors: [
-		{ name: "FaceDev", url: "https://youtube.com/@FaceDevStuff" },
-		{ name: "Outpoot", url: "https://outpoot.com" },
-	],
-	creator: "FaceDev",
-	publisher: "Outpoot",
+	authors: [{ name: "Catplay" }],
+	creator: "Catplay",
+	publisher: "Catplay",
 	robots: {
 		index: true,
 		follow: true,
@@ -49,15 +46,15 @@ export const metadata: Metadata = {
 		},
 	},
 	icons: {
-		icon: "/favicon.svg",
+		icon: "/favicon-48x48.png",
 		apple: "/apple-touch-icon.png",
 	},
 	openGraph: {
 		type: "website",
 		locale: "en_US",
 		url: siteUrl,
-		siteName: "EditMash",
-		title: "EditMash",
+		siteName: "Catmash",
+		title: "Catmash",
 		description:
 			"Join timed matches and collaborate with dozens of players to create short, chaotic videos on a shared timeline. No skill required — just fun and creativity.",
 		images: [
@@ -65,23 +62,21 @@ export const metadata: Metadata = {
 				url: "/thumbnail.png",
 				width: 1200,
 				height: 630,
-				alt: "EditMash — Create chaos together",
+				alt: "Catmash — Create chaos together",
 			},
 		],
 	},
 	twitter: {
 		card: "summary_large_image",
-		title: "EditMash",
+		title: "Catmash",
 		description:
 			"Join timed matches and collaborate with dozens of players to create short, chaotic videos on a shared timeline. No skill required — just fun and creativity.",
 		images: ["/thumbnail.png"],
-		site: "@facedevstuff",
-		creator: "@facedevstuff",
 	},
-	applicationName: "EditMash",
+	applicationName: "Catmash",
 	appleWebApp: {
 		capable: true,
-		title: "EditMash",
+		title: "Catmash",
 		statusBarStyle: "default",
 	},
 	formatDetection: {
@@ -103,7 +98,6 @@ export default function RootLayout({
 				{process.env.NODE_ENV === "development" && (
 					<script crossOrigin="anonymous" src="//unpkg.com/react-scan/dist/auto.global.js" />
 				)}
-				<script defer data-domain="editmash.com" src="https://analytics.outpoot.com/js/script.file-downloads.js"></script>
 			</head>
 			<body className="antialiased">
 				<BannedCheck>{children}</BannedCheck>
