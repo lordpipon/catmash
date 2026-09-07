@@ -252,7 +252,7 @@ const MainLayout = forwardRef<MainLayoutRef, MainLayoutProps>(
 				{isDragOver && (
 					<div className="fixed inset-0 z-90 bg-black/60 backdrop-blur-sm flex items-center justify-center pointer-events-none">
 						<div className="bg-foreground/90 px-8 py-6 rounded-2xl flex flex-col items-center gap-3 border-2 border-primary/50 animate-pulse">
-							<HugeiconsIcon icon={Upload04Icon} size={48} strokeWidth={2} className="text-primary" />
+							<HugeiconsIcon icon={Upload04Icon} size={48} strokeWidth={2} className="text-primary-foreground" />
 							<span className="text-xl font-semibold text-primary-foreground">Drop files to upload</span>
 						</div>
 					</div>
