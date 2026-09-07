@@ -51,12 +51,13 @@ WORKDIR /app
 COPY --from=build-main --chown=node:node /app/.next/standalone ./
 COPY --from=build-main --chown=node:node /app/.next/static ./.next/static
 COPY --from=build-main --chown=node:node /app/public ./public
+COPY --from=build-main --chown=node:node /app/app-proxy.mjs ./app-proxy.mjs
 
 RUN mkdir -p /data && chown node:node /data
 
 USER node
 EXPOSE 3000
-CMD ["node", "server.js"]
+CMD ["node", "app-proxy.mjs"]
 
 FROM oven/bun:1 AS production-websocket
 WORKDIR /websocket
