@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import { BannedCheck } from "./components/BannedCheck";
@@ -8,6 +8,13 @@ const fontSans = Inter({ subsets: ["latin"], variable: "--font-sans" });
 const fontMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://mash.catplay.org";
+
+export const viewport: Viewport = {
+	themeColor: [
+		{ media: "(prefers-color-scheme: light)", color: "#000000" },
+		{ media: "(prefers-color-scheme: dark)", color: "#ffffff" },
+	],
+};
 
 export const metadata: Metadata = {
 	metadataBase: new URL(siteUrl),
@@ -73,10 +80,6 @@ export const metadata: Metadata = {
 	formatDetection: {
 		telephone: false,
 	},
-	themeColor: [
-		{ media: "(prefers-color-scheme: light)", color: "#000000" },
-		{ media: "(prefers-color-scheme: dark)", color: "#ffffff" },
-	],
 };
 
 export default function RootLayout({
