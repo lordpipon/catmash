@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import { db, user } from "@/lib/db";
-import { eq } from "drizzle-orm";
+import { db, user, account } from "@/lib/db";
+import { eq, and } from "drizzle-orm";
 
 export async function POST(req: Request) {
 	const session = await auth.api.getSession({
@@ -20,6 +20,24 @@ export async function POST(req: Request) {
 	}
 	if (newEmail === session.user.email) {
 		return NextResponse.json({ error: "Email is the same" }, { status: 400 });
+	}
+
+	const hasCredential = await db()
+		.select({ password: account.password })
+		.from(account)
+		.where(and(eq(account.userId, session.user.id), eq(account.providerId, "credential")))
+		.limit(1);
+
+	const password = typeof body?.password === "string" ? body.password : "";
+	if (hasCredential.length > 0 && hasCredential[0].password) {
+		if (!password) {
+			return NextResponse.json({ error: "Enter your current password to change email" }, { status: 400 });
+		}
+		const ctx = await auth.$context;
+		const emailResult = await ctx.password.verify({ hash: hasCredential[0].password, password });
+		if (!emailResult) {
+			return NextResponse.json({ error: "Current password is incorrect" }, { status: 401 });
+		}
 	}
 
 	const existing = await db()

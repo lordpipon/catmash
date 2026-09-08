@@ -67,6 +67,7 @@ export default function AccountPage() {
 	const [newPassword, setNewPassword] = useState("");
 	const [confirmNewPassword, setConfirmNewPassword] = useState("");
 	const [newEmail, setNewEmail] = useState("");
+	const [emailPassword, setEmailPassword] = useState("");
 	const [secBusy, setSecBusy] = useState(false);
 
 	useEffect(() => {
@@ -400,12 +401,16 @@ export default function AccountPage() {
 			toast.error("Enter a valid email address");
 			return;
 		}
+		if (secStatus?.hasPassword && !emailPassword) {
+			toast.error("Enter your current password to change email");
+			return;
+		}
 		setSecBusy(true);
 		try {
 			const res = await fetch("/api/user/change-email", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ newEmail }),
+				body: JSON.stringify({ newEmail, password: emailPassword }),
 			});
 			const d = await res.json().catch(() => ({}));
 			if (!res.ok) {
@@ -414,6 +419,7 @@ export default function AccountPage() {
 			}
 			toast.success(`Email updated to ${newEmail}`);
 			setNewEmail("");
+			setEmailPassword("");
 			await getSession({ query: { disableCookieCache: true } });
 			window.location.reload();
 		} finally {
@@ -755,6 +761,14 @@ export default function AccountPage() {
 							<div className="rounded-lg border p-4 space-y-3">
 								<p className="text-sm font-medium">Change Email</p>
 								<p className="text-xs text-muted-foreground">Current email: {user.email}</p>
+								{secStatus?.hasPassword && (
+									<Input
+										type="password"
+										placeholder="Current password"
+										value={emailPassword}
+										onChange={(e) => setEmailPassword(e.target.value)}
+									/>
+								)}
 								<div className="flex gap-2">
 									<Input
 										type="email"
@@ -762,7 +776,11 @@ export default function AccountPage() {
 										value={newEmail}
 										onChange={(e) => setNewEmail(e.target.value)}
 									/>
-									<Button size="sm" onClick={handleChangeEmail} disabled={secBusy || !newEmail}>
+									<Button
+										size="sm"
+										onClick={handleChangeEmail}
+										disabled={secBusy || !newEmail || (secStatus?.hasPassword && !emailPassword)}
+									>
 										Update Email
 									</Button>
 								</div>

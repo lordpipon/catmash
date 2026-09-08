@@ -1054,22 +1054,29 @@ const Timeline = forwardRef<TimelineRef, TimelineProps>(
 
 					const newClip = createNewClip(mediaItem, dropTime, clipDuration);
 
+					const expectedTrackType = mediaItem.type === "image" ? "video" : mediaItem.type;
+					const stateRef = timelineStateRef.current;
+					let targetTrackId = trackId;
+					const targetTrack = stateRef.tracks.find((t) => t.id === trackId);
+					if (targetTrack && targetTrack.type !== expectedTrackType) {
+						const fallback = stateRef.tracks.find((t) => t.type === expectedTrackType);
+						if (fallback) targetTrackId = fallback.id;
+					}
+
 					updateTimelineState((prev) => {
 						const newState = { ...prev, tracks: prev.tracks.map((t) => ({ ...t, clips: [...t.clips] })) };
-						const expectedTrackType = mediaItem.type === "image" ? "video" : mediaItem.type;
-						let trackIndex = newState.tracks.findIndex((t) => t.id === trackId);
-						if (trackIndex === -1) return prev;
-						if (newState.tracks[trackIndex].type !== expectedTrackType) {
-							trackIndex = newState.tracks.findIndex((t) => t.type === expectedTrackType);
-							if (trackIndex === -1) return prev;
+						if (!newState.tracks.some((t) => t.id === targetTrackId)) {
+							const fallback = newState.tracks.find((t) => t.type === expectedTrackType);
+							if (!fallback) return prev;
+							targetTrackId = fallback.id;
 						}
-						const actualTrackId = newState.tracks[trackIndex].id;
-						trackId = actualTrackId;
-						newState.tracks[trackIndex].clips.push(newClip);
-						return placeClipOnTimeline(newClip, actualTrackId, newState).state;
+						newState.tracks = newState.tracks.map((t) =>
+							t.id === targetTrackId ? { ...t, clips: [...t.clips, newClip] } : t
+						);
+						return placeClipOnTimeline(newClip, targetTrackId, newState).state;
 					});
 
-					onClipAddedRef.current?.(trackId, newClip);
+					onClipAddedRef.current?.(targetTrackId, newClip);
 				} catch (err) {
 					console.error("Error handling media drop:", err);
 				}
