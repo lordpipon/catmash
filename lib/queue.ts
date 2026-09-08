@@ -352,12 +352,10 @@ async function processNextJob(): Promise<void> {
 			try {
 				await updateMatchRender(matchId, jobId, proxiedUrl);
 				await updateMatchStatus(matchId, "completed");
-				if (matchInfo) {
-					await updateLobbyMatchId(matchInfo.lobbyId, matchId);
-					if (hasContent) {
-						await updateLobbyStatus(matchInfo.lobbyId, "closed");
-					}
-				}
+if (matchInfo) {
+				await updateLobbyMatchId(matchInfo.lobbyId, matchId);
+				await updateLobbyStatus(matchInfo.lobbyId, "closed");
+			}
 				await deleteMatchMedia(matchId);
 				await setRenderProgress(matchId, 100);
 			} catch (error) {

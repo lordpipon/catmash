@@ -1056,13 +1056,17 @@ const Timeline = forwardRef<TimelineRef, TimelineProps>(
 
 					updateTimelineState((prev) => {
 						const newState = { ...prev, tracks: prev.tracks.map((t) => ({ ...t, clips: [...t.clips] })) };
-						const trackIndex = newState.tracks.findIndex((t) => t.id === trackId);
-						if (trackIndex === -1) return prev;
-						const track = newState.tracks[trackIndex];
 						const expectedTrackType = mediaItem.type === "image" ? "video" : mediaItem.type;
-						if (track.type !== expectedTrackType) return prev;
+						let trackIndex = newState.tracks.findIndex((t) => t.id === trackId);
+						if (trackIndex === -1) return prev;
+						if (newState.tracks[trackIndex].type !== expectedTrackType) {
+							trackIndex = newState.tracks.findIndex((t) => t.type === expectedTrackType);
+							if (trackIndex === -1) return prev;
+						}
+						const actualTrackId = newState.tracks[trackIndex].id;
+						trackId = actualTrackId;
 						newState.tracks[trackIndex].clips.push(newClip);
-						return placeClipOnTimeline(newClip, trackId, newState).state;
+						return placeClipOnTimeline(newClip, actualTrackId, newState).state;
 					});
 
 					onClipAddedRef.current?.(trackId, newClip);
